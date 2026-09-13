@@ -8,39 +8,28 @@
   <link rel="icon" href="data:,">
   <meta name="description" content="BLACK MARKET — a premium slot concept by GRIND. Distinct by Design.">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./bonus.css">
 </head>
 <body>
   <div class="stage" id="stage">
     <img class="ref-bg" src="./assets/black-market-reference.webp" alt="">
-
     <div class="reel-grid" id="reelGrid"></div>
-
-    <!-- Invisible hit area over the BUY label in the reference artwork. -->
     <button class="buy-hotspot" id="btnBuy" aria-label="Open Bonus Buy">BUY ACCESS</button>
-
     <div class="bonus-status" id="bonusStatus" aria-live="polite">
       <span id="bonusMode">VAULT ACCESS</span>
       <b><span id="bonusSpins">0</span> SPINS</b>
       <b id="bonusMultiplier">×1</b>
     </div>
-
     <div class="hud" id="hud">
       <button class="btn menu" id="btnMenu" aria-label="Menu">≡</button>
-      <div class="metric" id="metricBalance">
-        <span class="label">BALANCE</span>
-        <span class="value" id="balance">$991.30</span>
-      </div>
+      <div class="metric" id="metricBalance"><span class="label">BALANCE</span><span class="value" id="balance">$991.30</span></div>
       <button class="btn minus" id="btnMinus" aria-label="Decrease bet">−</button>
-      <div class="metric" id="metricBet">
-        <span class="label">BET</span>
-        <span class="value" id="bet">$1.00</span>
-      </div>
+      <div class="metric" id="metricBet"><span class="label">BET</span><span class="value" id="bet">$1.00</span></div>
       <button class="btn plus" id="btnPlus" aria-label="Increase bet">+</button>
       <button class="btn spin" id="btnSpin" aria-label="Spin">↻</button>
       <button class="btn autoplay" id="btnAutoplay" aria-label="Autoplay">AUTOPLAY</button>
       <button class="btn turbo" id="btnTurbo" aria-label="Turbo">TURBO</button>
     </div>
-
     <div class="message" id="message"></div>
     <div class="feature-splash" id="featureSplash"><span id="featureSplashLabel">ACCESS GRANTED</span></div>
   </div>
@@ -50,12 +39,7 @@
       <button class="modal-close" id="modalClose" aria-label="Close">×</button>
       <h2>BLACK MARKET</h2>
       <p>This public build is an audience demo using local virtual-credit outcomes. Production outcomes, RTP, max win and feature probabilities remain TBD until the Stake Engine math package is verified.</p>
-      <div class="rule-grid">
-        <div><small>FORMAT</small><b>5 × 4</b></div>
-        <div><small>RTP</small><b>TBD</b></div>
-        <div><small>MAX WIN</small><b>TBD</b></div>
-        <div><small>PROVIDER</small><b>GRIND.</b></div>
-      </div>
+      <div class="rule-grid"><div><small>FORMAT</small><b>5 × 4</b></div><div><small>RTP</small><b>TBD</b></div><div><small>MAX WIN</small><b>TBD</b></div><div><small>PROVIDER</small><b>GRIND.</b></div></div>
     </div>
   </section>
 
@@ -65,33 +49,12 @@
       <div class="bonus-kicker">PRIVATE AUCTION // FEATURE ACCESS</div>
       <h2>BUY ACCESS</h2>
       <p class="bonus-intro">Choose how deep you want to enter. All prices use virtual demo credits.</p>
-
       <div class="bonus-cards">
-        <button class="bonus-card" data-mode="backroom">
-          <span class="bonus-art sprite-trigger buyer"></span>
-          <span class="bonus-card-copy"><b>BACKROOM PASS</b><small>6 bonus spins · more special symbols</small></span>
-          <strong>60× BET</strong>
-        </button>
-        <button class="bonus-card" data-mode="vault">
-          <span class="bonus-art sprite-trigger vault-key"></span>
-          <span class="bonus-card-copy"><b>VAULT ACCESS</b><small>8 bonus spins · 1 persistent modifier</small></span>
-          <strong>100× BET</strong>
-        </button>
-        <button class="bonus-card" data-mode="black">
-          <span class="bonus-art sprite-modifier black-card"></span>
-          <span class="bonus-card-copy"><b>BLACK CARD</b><small>10 bonus spins · ×3 start · 2 modifiers</small></span>
-          <strong>200× BET</strong>
-        </button>
+        <button class="bonus-card" data-mode="backroom"><span class="bonus-art sprite-trigger buyer"></span><span class="bonus-card-copy"><b>BACKROOM PASS</b><small>6 bonus spins · more special symbols</small></span><strong>60× BET</strong></button>
+        <button class="bonus-card" data-mode="vault"><span class="bonus-art sprite-trigger vault-key"></span><span class="bonus-card-copy"><b>VAULT ACCESS</b><small>8 bonus spins · 1 persistent modifier</small></span><strong>100× BET</strong></button>
+        <button class="bonus-card" data-mode="black"><span class="bonus-art sprite-modifier black-card"></span><span class="bonus-card-copy"><b>BLACK CARD</b><small>10 bonus spins · ×3 start · 2 modifiers</small></span><strong>200× BET</strong></button>
       </div>
-
-      <div class="buy-confirm" id="buyConfirm" hidden>
-        <div>
-          <small>SELECTED ACCESS</small>
-          <b id="confirmName">VAULT ACCESS</b>
-          <span id="confirmCost">$100.00</span>
-        </div>
-        <button id="confirmBuy">CONFIRM PURCHASE</button>
-      </div>
+      <div class="buy-confirm" id="buyConfirm" hidden><div><small>SELECTED ACCESS</small><b id="confirmName">VAULT ACCESS</b><span id="confirmCost">$100.00</span></div><button id="confirmBuy">CONFIRM PURCHASE</button></div>
       <p class="bonus-note">Prototype only. Bonus Buy math, pricing and feature probabilities are not production-approved.</p>
     </div>
   </section>
