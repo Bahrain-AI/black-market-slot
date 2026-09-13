@@ -31,6 +31,8 @@ This repository contains the playable frontend, a zero-build public demo, GRIND.
 
 The public demo is intentionally separated from the production Stake Engine path. It uses virtual credits and local demo outcomes only so visitors can experience the visual direction and interaction without an RGS session.
 
+> **Visual rebuild in progress:** the current live demo still uses the earlier presentation. The next task is the 1:1 rebuild against the supplied luxury-auction reference. See [`HANDOFF.md`](HANDOFF.md) for exact continuation notes, reference-grid coordinates, controls, acceptance criteria and terminal commands.
+
 ## GRIND. — provider identity
 
 <p align="center">
@@ -98,6 +100,14 @@ pnpm dev
 
 Without Engine launch parameters, the app runs in a clearly separated local demo mode for frontend development. Production sessions are intended to obtain outcomes from the RGS.
 
+For the zero-build audience demo only:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open `http://localhost:8080/demo/`.
+
 ## Production build
 
 ```bash
@@ -130,6 +140,7 @@ Before submission we still need to:
 ## Repository structure
 
 ```text
+HANDOFF.md       continuation notes for the 1:1 browser-demo rebuild
 branding/        GRIND. identity + BLACK MARKET cover assets
 demo/            zero-build public audience demo
 math/            math package notes / production math work
