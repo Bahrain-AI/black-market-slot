@@ -7,6 +7,10 @@
 <p align="center"><strong>A premium auction-house slot concept by GRIND.</strong></p>
 
 <p align="center">
+  <a href="https://raw.githack.com/Bahrain-AI/black-market-slot/main/demo/index.html"><strong>▶ PLAY THE PUBLIC DEMO</strong></a>
+</p>
+
+<p align="center">
   <strong>RARE ITEMS. BIGGER STORIES.</strong><br/>
   Stake Engine-ready frontend · Svelte 5 · Vite · Responsive · RGS integration scaffold
 </p>
@@ -17,9 +21,15 @@
 
 **BLACK MARKET** is a luxury underground-auction slot built around rare objects, escalating bids and high-stakes presentation. The visual language combines black marble, smoked glass, champagne gold and gallery lighting with a restrained premium interface.
 
-This repository contains the playable frontend, GRIND. provider branding, Stake Engine integration layer, submission notes and the foundation for the production math package.
+This repository contains the playable frontend, a zero-build public demo, GRIND. provider branding, Stake Engine integration layer, submission notes and the foundation for the production math package.
 
 > **Current status:** frontend/integration prototype. The final certified math package and production RTP are still pending validation and simulation.
+
+## Play it
+
+**Live audience demo:** https://raw.githack.com/Bahrain-AI/black-market-slot/main/demo/index.html
+
+The public demo is intentionally separated from the production Stake Engine path. It uses virtual credits and local demo outcomes only so visitors can experience the visual direction and interaction without an RGS session.
 
 ## GRIND. — provider identity
 
@@ -46,7 +56,7 @@ The complete working brand kit is in [`branding/`](branding/):
 - WILD substitution
 - Responsive desktop/mobile/popout layout
 - Keyboard spin support
-- Turbo / autoplay UI support
+- Turbo UI support
 - RGS-controlled balance, currency and bet levels
 - Replay-mode support
 - Local assets only; no runtime CDN dependency
@@ -121,6 +131,7 @@ Before submission we still need to:
 
 ```text
 branding/        GRIND. identity + BLACK MARKET cover assets
+demo/            zero-build public audience demo
 math/            math package notes / production math work
 src/             Svelte application source
 stake-engine/    Engine integration + submission checklist
