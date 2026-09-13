@@ -1,0 +1,42 @@
+/* BLACK MARKET — Bonus Buy / Vault feature UI */
+.buy-hotspot{position:absolute;z-index:35;left:5.35%;top:34.4%;width:8.9%;height:5.4%;border:0;background:transparent;color:transparent;cursor:pointer;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.buy-hotspot:hover,.buy-hotspot:focus-visible{outline:1px solid rgba(213,177,111,.58);box-shadow:0 0 22px rgba(213,177,111,.22),inset 0 0 18px rgba(213,177,111,.08)}
+.buy-hotspot:disabled{cursor:not-allowed;opacity:.35}
+
+.bonus-status{position:absolute;z-index:42;left:50%;top:3.3%;transform:translateX(-50%) translateY(-12px);display:flex;gap:14px;align-items:center;padding:9px 16px;border:1px solid rgba(216,177,105,.55);border-radius:999px;background:rgba(12,10,8,.84);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.35);color:#f2dfb8;opacity:0;pointer-events:none;transition:.22s ease;font-size:clamp(8px,.75vw,12px);letter-spacing:.1em}
+.bonus-status.active{opacity:1;transform:translateX(-50%) translateY(0)}
+.bonus-status span:first-child{color:#c9a363}.bonus-status b{font-weight:600}.bonus-status #bonusMultiplier{font-family:Georgia,serif;font-size:1.25em;color:#f1c969}
+
+.feature-splash{position:absolute;z-index:90;left:50%;top:48%;transform:translate(-50%,-50%) scale(.86);display:grid;place-items:center;min-width:280px;min-height:150px;padding:24px 44px;border:1px solid rgba(225,185,108,.78);border-radius:18px;background:radial-gradient(circle at 50% 20%,rgba(101,75,35,.42),rgba(10,8,6,.95) 68%);box-shadow:0 30px 80px rgba(0,0,0,.65),0 0 60px rgba(210,164,76,.18);font:600 clamp(18px,2vw,32px)/1.05 Georgia,serif;letter-spacing:.13em;color:#f6dca2;text-align:center;opacity:0;pointer-events:none;transition:.25s ease}
+.feature-splash.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+.bonus-modal{background:rgba(5,4,3,.9)}
+.bonus-panel{position:relative;width:min(980px,94vw);max-height:90vh;overflow:auto;padding:34px;border:1px solid rgba(204,161,84,.72);border-radius:22px;background:radial-gradient(circle at 50% -10%,rgba(92,67,31,.4),transparent 38%),linear-gradient(180deg,#17130f,#090807 84%);box-shadow:0 35px 110px rgba(0,0,0,.75);color:#e9dcc7}
+.bonus-panel .modal-close{color:#d8bd8b;border:1px solid rgba(201,162,96,.2)}
+.bonus-panel .modal-close:hover{background:rgba(215,178,111,.08);color:#f3dcae}
+.bonus-kicker{font-size:10px;letter-spacing:.28em;color:#ad8d5c;text-transform:uppercase;margin-bottom:8px}
+.bonus-panel h2{margin:0;color:#f2dfbc;font:500 clamp(38px,5vw,64px)/.95 Georgia,serif;letter-spacing:.03em}
+.bonus-intro{margin:12px 0 24px!important;color:#a99a85!important}
+.bonus-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bonus-card{display:grid;grid-template-rows:145px auto auto;gap:10px;text-align:left;padding:12px;border:1px solid rgba(198,155,82,.28);border-radius:16px;background:linear-gradient(180deg,rgba(42,34,25,.92),rgba(15,13,11,.98));color:#eee1cc;cursor:pointer;transition:.16s ease;overflow:hidden}
+.bonus-card:hover,.bonus-card.selected{transform:translateY(-3px);border-color:#c99e59;box-shadow:0 18px 40px rgba(0,0,0,.35),0 0 28px rgba(203,159,80,.12)}
+.bonus-card.selected{background:linear-gradient(180deg,rgba(67,49,26,.96),rgba(17,13,9,.99))}
+.bonus-art{display:block;border-radius:11px;background-color:#090807;background-repeat:no-repeat;box-shadow:inset 0 0 0 1px rgba(217,179,107,.18)}
+.sprite-trigger{background-image:url('../assets/special-bonus/bonus-triggers.svg');background-size:400% 200%}
+.sprite-modifier{background-image:url('../assets/special-bonus/vault-modifiers.svg');background-size:400% 200%}
+.sprite-trigger.buyer{background-position:33.333% 0}
+.sprite-trigger.vault-key{background-position:66.666% 100%}
+.sprite-modifier.black-card{background-position:100% 0}
+.bonus-card-copy{display:block;min-height:48px}.bonus-card-copy b{display:block;font:600 16px Georgia,serif;letter-spacing:.08em;color:#f0d7a6}.bonus-card-copy small{display:block;margin-top:5px;color:#958772;font-size:10px;line-height:1.35;letter-spacing:.04em}.bonus-card strong{justify-self:start;padding:7px 9px;border:1px solid rgba(221,180,105,.35);border-radius:999px;color:#dcb66d;font-size:11px;letter-spacing:.1em}
+.buy-confirm{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 16px;border:1px solid rgba(201,158,84,.34);border-radius:14px;background:rgba(7,6,5,.72)}
+.buy-confirm[hidden]{display:none}.buy-confirm small{display:block;color:#927c5d;font-size:9px;letter-spacing:.15em}.buy-confirm b{display:block;margin-top:4px;font-family:Georgia,serif;color:#efd7a6}.buy-confirm span{display:inline-block;margin-top:3px;color:#cba867;font-size:12px}.buy-confirm button{padding:12px 18px;border:1px solid #d3ab61;border-radius:999px;background:linear-gradient(180deg,#deb96e,#a97933);color:#19120a;font-weight:700;letter-spacing:.08em;cursor:pointer}.buy-confirm button:disabled{filter:grayscale(1);opacity:.42;cursor:not-allowed}
+.bonus-note{margin:14px 0 0!important;color:#756a5d!important;font-size:10px!important;line-height:1.5!important}
+
+.cell .special-token{position:absolute;z-index:8;inset:6%;border-radius:8px;background-repeat:no-repeat;background-size:400% 200%;background-image:url('../assets/special-bonus/bonus-triggers.svg');box-shadow:0 0 0 1px rgba(232,193,117,.52),0 0 35px rgba(221,173,83,.28);animation:specialIn .35s ease both}
+.cell .special-token.scatter{background-position:0 0}.cell .special-token.buyer{background-position:33.333% 0}.cell .special-token.wild-case{background-position:66.666% 0}.cell .special-token.multiplier{background-position:100% 0}.cell .special-token.red-phone{background-position:0 100%}.cell .special-token.printer{background-position:33.333% 100%}.cell .special-token.vault-key{background-position:66.666% 100%}.cell .special-token.emp{background-position:100% 100%}
+@keyframes specialIn{from{opacity:0;transform:scale(.7) rotate(-4deg);filter:brightness(1.8)}to{opacity:1;transform:scale(1);filter:brightness(1)}}
+
+.modifier-strip{display:flex;gap:5px;align-items:center}.modifier-chip{padding:4px 7px;border:1px solid rgba(217,173,96,.3);border-radius:999px;color:#caa566;background:rgba(36,28,19,.65);font-size:.82em}
+
+@media(max-width:760px){.bonus-panel{padding:22px}.bonus-cards{grid-template-columns:1fr;gap:9px}.bonus-card{grid-template-columns:100px 1fr auto;grid-template-rows:90px;align-items:center}.bonus-art{height:90px}.bonus-card-copy{min-height:0}.buy-confirm{align-items:flex-start;flex-direction:column}.buy-confirm button{width:100%}}
+@media(prefers-reduced-motion:reduce){.bonus-status,.feature-splash,.bonus-card,.cell .special-token{animation:none!important;transition:none!important}}
