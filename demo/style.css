@@ -38,10 +38,10 @@ body{
   display:grid;
   /* Exact reference column widths (px within the 891-wide grid):
      382→558=176, 558→735=177, 735→912=177, 912→1091=179, 1091→1273=182 */
-  grid-template-columns:176px 177px 177px 179px 182px;
+  grid-template-columns:176fr 177fr 177fr 179fr 182fr;
   /* Exact reference row heights (px within the 670-tall grid):
      109→284=175, 284→449=165, 449→614=165, 614→779=165 */
-  grid-template-rows:175px 165px 165px 165px;
+  grid-template-rows:175fr 165fr 165fr 165fr;
   pointer-events:none;
 }
 

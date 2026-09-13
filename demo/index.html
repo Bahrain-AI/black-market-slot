@@ -14,7 +14,7 @@
   <div class="stage" id="stage">
     <img class="ref-bg" src="./assets/black-market-reference.webp" alt="">
     <div class="reel-grid" id="reelGrid"></div>
-    <button class="buy-hotspot" id="btnBuy" aria-label="Open Bonus Buy">BUY ACCESS</button>
+    <button class="buy-hotspot" id="btnBuy" aria-label="Open Bonus Buy" aria-haspopup="dialog" aria-controls="bonusModal">BONUS BUY</button>
     <div class="bonus-status" id="bonusStatus" aria-live="polite">
       <span id="bonusMode">VAULT ACCESS</span>
       <b><span id="bonusSpins">0</span> SPINS</b>
@@ -43,11 +43,11 @@
     </div>
   </section>
 
-  <section class="modal bonus-modal" id="bonusModal" aria-hidden="true">
+  <section class="modal bonus-modal" id="bonusModal" role="dialog" aria-modal="true" aria-labelledby="bonusTitle" aria-hidden="true">
     <div class="bonus-panel">
       <button class="modal-close bonus-close" id="bonusClose" aria-label="Close">×</button>
       <div class="bonus-kicker">PRIVATE AUCTION // FEATURE ACCESS</div>
-      <h2>BUY ACCESS</h2>
+      <h2 id="bonusTitle">BONUS BUY</h2>
       <p class="bonus-intro">Choose how deep you want to enter. All prices use virtual demo credits.</p>
       <div class="bonus-cards">
         <button class="bonus-card" data-mode="backroom"><span class="bonus-art sprite-trigger buyer"></span><span class="bonus-card-copy"><b>BACKROOM PASS</b><small>6 bonus spins · more special symbols</small></span><strong>60× BET</strong></button>
