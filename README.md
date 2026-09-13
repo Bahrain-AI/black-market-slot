@@ -2,6 +2,22 @@
 
 Premium minimalist 5×4 slot frontend prepared for Stake Engine RGS integration.
 
+## Provider branding
+
+**Provider:** Grind Studios  
+**Consumer brand:** **GRIND.**  
+**Tagline:** **Distinct by Design.**
+
+Provider identity and current creative assets live in [`branding/`](branding/):
+
+- [`BRAND.md`](branding/BRAND.md) — brand system and logo-animation direction
+- [`grind-mark.webp`](branding/grind-mark.webp) — standalone broken-G mark
+- [`grind-logo-sheet.webp`](branding/grind-logo-sheet.webp) — wordmark / lockup reference
+- [`grind-logo-animation-storyboard.webp`](branding/grind-logo-animation-storyboard.webp) — six-stage reveal concept
+- [`black-market-cover.webp`](branding/black-market-cover.webp) — current BLACK MARKET cover direction
+
+These repo images are optimized working previews. Keep the original high-resolution generated masters for final Engine submission/export.
+
 ## Stack
 
 - Svelte 5
