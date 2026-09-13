@@ -23,7 +23,7 @@
 
 This repository contains the playable frontend, a zero-build public demo, GRIND. provider branding, complete reference/base asset pack, Stake Engine integration layer, Bonus Buy/Vault feature design, submission notes and the foundation for the production math package.
 
-> **Current status:** reference-matched playable prototype + Stake Engine integration scaffold. Final certified math, RTP, volatility, max exposure and Bonus Buy pricing are still pending validation/simulation.
+> **Current status:** reference-matched playable prototype with a working local Bonus Buy / Vault prototype + Stake Engine integration scaffold. Final certified math, RTP, volatility, max exposure and Bonus Buy pricing remain pending validation/simulation.
 
 ## Play it
 
@@ -58,24 +58,27 @@ The working brand kit is in [`branding/`](branding/), while high-resolution gene
 - Replay-mode support
 - Local assets only; no runtime CDN dependency
 
-Planned signature systems include **Bid War**, **Steal or Sell**, **The Vault**, and **Bonus Buy / Buy Access**.
+Signature systems include **Bid War**, **Steal or Sell**, **The Vault**, and **Bonus Buy / Buy Access**.
 
 ## Bonus Buy / The Vault
 
-The latest feature direction is documented in [`BONUS-BUY.md`](BONUS-BUY.md).
+The public demo now has a working local **BUY ACCESS** prototype. Click the BUY label on the left side of the reference scene or press **B**.
 
-Prototype Buy Access modes:
+Prototype modes:
 
-- **BACKROOM PASS — 60× bet** — immediate Bid War.
-- **VAULT ACCESS — 100× bet** — 8 Vault spins + choose 1 persistent modifier.
-- **BLACK CARD — 200× bet** — premium Vault with 2 modifiers + boosted starting multiplier.
+- **BACKROOM PASS — 60× bet** — 6 bonus spins with elevated special-symbol frequency.
+- **VAULT ACCESS — 100× bet** — 8 bonus spins with one persistent Vault modifier.
+- **BLACK CARD — 200× bet** — 10 bonus spins, a 3× starting multiplier and two persistent modifiers.
 
-New web-ready feature art is under [`assets/special-bonus/`](assets/special-bonus/):
+The bonus can trigger Scatter extra spins, Buyer WILD conversion, Wild Case spawns, multiplier chips, Red Phone multipliers, Counterfeit duplication, Vault Key premium upgrades and EMP low-symbol removal. Persistent Vault modifiers include Counterfeit Printer, Golden Key, Inside Man, EMP, Red Phone, Double Agent and Marked Lot.
+
+Web-ready feature art is under [`assets/special-bonus/`](assets/special-bonus/):
 
 - `bonus-triggers.svg` — Scatter, Buyer, Wild Case, Multiplier, Red Phone, Counterfeit Printer, Vault Key, EMP.
 - `vault-modifiers.svg` — Counterfeit Printer, Golden Key, Inside Man, Black Card, EMP, Red Phone, Double Agent, Marked Lot.
 - `bonus-ui.svg` — Auction Hammer, Vault Door, Wild Transformation, Multiplier Increase, Cascade Win, Big Win.
 - `manifest.json` — atlas layout and intended feature behavior.
+- [`BONUS-BUY.md`](assets/special-bonus/BONUS-BUY.md) — browser-ready asset/feature map.
 
 These are visual/prototype mechanics only. Final costs and probabilities must come from verified production math.
 
@@ -145,7 +148,7 @@ Before submission we still need to:
 2. Run large-scale simulations for each production mode.
 3. Optimize and verify RTP / volatility / max-win behavior.
 4. Generate final weighted lookup tables and outcome books.
-5. Replace provisional rules/paytable/feature-price copy with verified values.
+5. Replace prototype rules/feature-price copy with verified values.
 6. Complete final staging, mobile and replay QA.
 
 ## Repository structure
@@ -154,7 +157,7 @@ Before submission we still need to:
 BONUS-BUY.md     Buy Access / Vault feature specification
 HANDOFF.md       current continuation state and next steps
 branding/        GRIND. identity + cover previews
-demo/            reference-matched zero-build audience demo
+demo/            reference-matched zero-build audience demo + Bonus Buy
 math/            math package notes / production math work
 src/             Svelte application source
 stake-engine/    Engine integration + submission checklist
