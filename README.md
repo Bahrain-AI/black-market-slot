@@ -21,9 +21,9 @@
 
 **BLACK MARKET** is a luxury underground-auction slot built around rare objects, escalating bids and high-stakes presentation. The visual language combines black marble, smoked glass, champagne gold and gallery lighting with a restrained premium interface.
 
-This repository contains the playable frontend, a zero-build public demo, GRIND. provider branding, Stake Engine integration layer, submission notes and the foundation for the production math package.
+This repository contains the playable frontend, a zero-build public demo, GRIND. provider branding, complete reference/base asset pack, Stake Engine integration layer, Bonus Buy/Vault feature design, submission notes and the foundation for the production math package.
 
-> **Current status:** frontend/integration prototype. The final certified math package and production RTP are still pending validation and simulation.
+> **Current status:** reference-matched playable prototype + Stake Engine integration scaffold. Final certified math, RTP, volatility, max exposure and Bonus Buy pricing are still pending validation/simulation.
 
 ## Play it
 
@@ -31,7 +31,7 @@ This repository contains the playable frontend, a zero-build public demo, GRIND.
 
 The public demo is intentionally separated from the production Stake Engine path. It uses virtual credits and local demo outcomes only so visitors can experience the visual direction and interaction without an RGS session.
 
-> **Rebuilt 1:1 against the luxury-auction reference:** the demo now matches the supplied 1671×941 reference board (5×4 black/gold reel grid via per-cell artwork, THE BLACK MARKET branding, LOT 001, smoked HUD with Menu / Balance / Bet / Spin / Autoplay / Turbo), and is fully playable with virtual credits and local demo outcomes. See [`HANDOFF.md`](HANDOFF.md) for reference coordinates, controls and acceptance criteria.
+> **Rebuilt 1:1 against the luxury-auction reference:** the demo matches the supplied 1671×941 reference board with the exact 5×4 black/gold reel geometry, reference-derived idle artwork, THE BLACK MARKET branding, LOT 001, and the smoked HUD with Menu / Balance / Bet / Spin / Autoplay / Turbo.
 
 ## GRIND. — provider identity
 
@@ -43,27 +43,41 @@ The public demo is intentionally separated from the production Stake Engine path
 **Consumer brand:** **GRIND.**  
 **Tagline:** **Distinct by Design.**
 
-The complete working brand kit is in [`branding/`](branding/):
+The working brand kit is in [`branding/`](branding/), while high-resolution generated masters and the exact reference pack are under [`assets/black-market-complete-asset-pack/`](assets/black-market-complete-asset-pack/).
 
-- [`BRAND.md`](branding/BRAND.md) — brand system, usage and animation direction
-- [`grind-mark.webp`](branding/grind-mark.webp) — standalone broken-G symbol
-- [`grind-logo-sheet.webp`](branding/grind-logo-sheet.webp) — logo/lockup reference
-- [`grind-logo-animation-storyboard.webp`](branding/grind-logo-animation-storyboard.webp) — six-stage reveal storyboard
-- [`black-market-cover.webp`](branding/black-market-cover.webp) — current game cover direction
-
-## Game direction
+## Core game direction
 
 - Premium 5×4 slot presentation
 - Luxury underground-auction theme
 - WILD substitution
+- Reference-matched browser demo
 - Responsive desktop/mobile/popout layout
 - Keyboard spin support
-- Turbo UI support
-- RGS-controlled balance, currency and bet levels
+- Turbo / autoplay in the audience demo
+- RGS-controlled balance, currency and bet levels in the Engine path
 - Replay-mode support
 - Local assets only; no runtime CDN dependency
 
-Planned signature systems include **Bid War**, **Steal or Sell**, and **The Vault** bonus structure. These mechanics remain subject to final math balancing and approval.
+Planned signature systems include **Bid War**, **Steal or Sell**, **The Vault**, and **Bonus Buy / Buy Access**.
+
+## Bonus Buy / The Vault
+
+The latest feature direction is documented in [`BONUS-BUY.md`](BONUS-BUY.md).
+
+Prototype Buy Access modes:
+
+- **BACKROOM PASS — 60× bet** — immediate Bid War.
+- **VAULT ACCESS — 100× bet** — 8 Vault spins + choose 1 persistent modifier.
+- **BLACK CARD — 200× bet** — premium Vault with 2 modifiers + boosted starting multiplier.
+
+New web-ready feature art is under [`assets/special-bonus/`](assets/special-bonus/):
+
+- `bonus-triggers.svg` — Scatter, Buyer, Wild Case, Multiplier, Red Phone, Counterfeit Printer, Vault Key, EMP.
+- `vault-modifiers.svg` — Counterfeit Printer, Golden Key, Inside Man, Black Card, EMP, Red Phone, Double Agent, Marked Lot.
+- `bonus-ui.svg` — Auction Hammer, Vault Door, Wild Transformation, Multiplier Increase, Cascade Win, Big Win.
+- `manifest.json` — atlas layout and intended feature behavior.
+
+These are visual/prototype mechanics only. Final costs and probabilities must come from verified production math.
 
 ## Stake Engine integration
 
@@ -88,8 +102,19 @@ See [`stake-engine/README.md`](stake-engine/README.md) and [`stake-engine/submis
 - **TypeScript / JavaScript**
 - Static production build
 - Stake Engine RGS integration scaffold
+- Plain HTML/CSS/JS zero-build audience demo
 
 ## Local development
+
+For the audience demo:
+
+```bash
+python3 -m http.server 8080
+```
+
+Open `http://localhost:8080/demo/`.
+
+For the Svelte / Stake Engine application:
 
 ```bash
 nvm use
@@ -98,15 +123,7 @@ pnpm install
 pnpm dev
 ```
 
-Without Engine launch parameters, the app runs in a clearly separated local demo mode for frontend development. Production sessions are intended to obtain outcomes from the RGS.
-
-For the zero-build audience demo only:
-
-```bash
-python3 -m http.server 8080
-```
-
-Then open `http://localhost:8080/demo/`.
+Without Engine launch parameters, the Svelte app runs in a clearly separated local demo mode for frontend development. Production sessions are intended to obtain outcomes from the RGS.
 
 ## Production build
 
@@ -114,7 +131,7 @@ Then open `http://localhost:8080/demo/`.
 pnpm build
 ```
 
-The resulting `dist/` directory is the static frontend bundle intended for deployment/submission.
+The resulting `dist/` directory is the static frontend bundle intended for Engine deployment/submission.
 
 ## Math status
 
@@ -124,34 +141,29 @@ See [`math/README.md`](math/README.md).
 
 Before submission we still need to:
 
-1. Finish the actual game math model.
+1. Finish the actual game math model, including each Bonus Buy game mode.
 2. Run large-scale simulations for each production mode.
 3. Optimize and verify RTP / volatility / max-win behavior.
 4. Generate final weighted lookup tables and outcome books.
-5. Replace provisional rules/paytable copy with verified production values.
+5. Replace provisional rules/paytable/feature-price copy with verified values.
 6. Complete final staging, mobile and replay QA.
-
-## Brand previews
-
-<p align="center">
-  <img src="branding/grind-logo-animation-storyboard.webp" alt="GRIND. logo animation storyboard" width="900" />
-</p>
 
 ## Repository structure
 
 ```text
-HANDOFF.md       continuation notes for the 1:1 browser-demo rebuild
-branding/        GRIND. identity + BLACK MARKET cover assets
-demo/            zero-build public audience demo
+BONUS-BUY.md     Buy Access / Vault feature specification
+HANDOFF.md       current continuation state and next steps
+branding/        GRIND. identity + cover previews
+demo/            reference-matched zero-build audience demo
 math/            math package notes / production math work
 src/             Svelte application source
 stake-engine/    Engine integration + submission checklist
-assets/          game art and symbols
+assets/          base game, full generated masters, reel art and bonus assets
 ```
 
 ## Disclaimer
 
-This project is in active development and is **not yet a certified or production-approved gambling product**. Final gameplay probabilities, RTP, paytable values and release assets must be validated before submission or public wagering use.
+This project is in active development and is **not yet a certified or production-approved gambling product**. Final gameplay probabilities, RTP, paytable values, feature pricing and release assets must be validated before submission or public wagering use.
 
 ---
 
