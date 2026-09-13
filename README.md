@@ -31,7 +31,7 @@ This repository contains the playable frontend, a zero-build public demo, GRIND.
 
 The public demo is intentionally separated from the production Stake Engine path. It uses virtual credits and local demo outcomes only so visitors can experience the visual direction and interaction without an RGS session.
 
-> **Visual rebuild in progress:** the current live demo still uses the earlier presentation. The next task is the 1:1 rebuild against the supplied luxury-auction reference. See [`HANDOFF.md`](HANDOFF.md) for exact continuation notes, reference-grid coordinates, controls, acceptance criteria and terminal commands.
+> **Rebuilt 1:1 against the luxury-auction reference:** the demo now matches the supplied 1671×941 reference board (5×4 black/gold reel grid via per-cell artwork, THE BLACK MARKET branding, LOT 001, smoked HUD with Menu / Balance / Bet / Spin / Autoplay / Turbo), and is fully playable with virtual credits and local demo outcomes. See [`HANDOFF.md`](HANDOFF.md) for reference coordinates, controls and acceptance criteria.
 
 ## GRIND. — provider identity
 
