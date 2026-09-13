@@ -2,72 +2,121 @@
 
 Last updated: 2026-09-13
 
-## Goal
-
-Continue the BLACK MARKET slot prototype and rebuild the public browser demo to match the supplied luxury-auction reference image as closely as possible while keeping it genuinely playable.
-
 Repository: `https://github.com/Bahrain-AI/black-market-slot`
 
-Public demo URL: `https://raw.githack.com/Bahrain-AI/black-market-slot/main/demo/index.html`
+Public demo: `https://raw.githack.com/Bahrain-AI/black-market-slot/main/demo/index.html`
 
-## Important current state
+## Current state
 
-The current public demo is still the earlier audience demo. It is **not yet the 1:1 reference-matched implementation**.
+The browser demo **has now been rebuilt against the supplied 1671×941 luxury-auction reference**. The previous note that the demo was still the older generic presentation is obsolete.
 
-The existing live demo files are:
+Current demo characteristics:
 
-- `demo/index.html`
-- `demo/style.css`
-- `demo/game.js`
+- 5×4 black/gold reel grid aligned to the reference.
+- Reference-derived idle tiles / game art.
+- THE BLACK MARKET left-side branding.
+- LOT 001 / THE UNKNOWN right-side display.
+- Smoked lower HUD.
+- Menu, Balance, Bet −/+, Spin, Autoplay and Turbo.
+- Virtual-credit local demo outcomes.
+- Spacebar spin.
+- Responsive proportional scaling.
 
-Reference-image payload chunks from the previous reconstruction attempt are already committed under:
+The separate production-oriented Stake Engine application remains under `src/` with its RGS/replay integration scaffold. Do not replace it with the zero-build `demo/` implementation.
 
-- `demo/ref/`
+## Asset state
 
-Do not assume those chunks are already wired correctly. The currently committed `demo/index.html` does not use them.
+The complete base/reference art pack is committed under:
 
-The separate Stake Engine application lives under `src/` and should not be confused with the public static demo. Preserve the Stake Engine/RGS work while rebuilding `demo/`.
+`assets/black-market-complete-asset-pack/`
 
-## Reference composition
+This includes:
 
-Original reference canvas: **1671 × 941 px** (~16:9).
+- high-resolution GRIND. / BLACK MARKET branding masters
+- exact BLACK MARKET reference image
+- reference-derived symbol crops
+- legacy prototype source art
 
-The browser demo should preserve this exact aspect ratio and scale the complete scene as one stage. Avoid responsive reflow of individual objects on desktop; scale the stage proportionally instead.
+Current runtime symbols/assets also exist under `assets/` and `demo/assets/` as appropriate.
 
-Approximate reel-grid pixel boundaries on the 1671×941 reference:
+## Latest addition — Bonus Buy / The Vault
+
+Read [`BONUS-BUY.md`](BONUS-BUY.md) before implementing the next feature phase.
+
+Prototype Buy Access modes:
+
+- **Backroom Pass — 60× bet**
+- **Vault Access — 100× bet**
+- **Black Card — 200× bet**
+
+Those prices are design targets only, not verified production values.
+
+New web-ready special feature assets are committed under:
+
+`assets/special-bonus/`
+
+Files:
+
+- `bonus-triggers.svg`
+- `vault-modifiers.svg`
+- `bonus-ui.svg`
+- `manifest.json`
+- `README.md`
+
+Special trigger art covers:
+
+- Scatter Crown
+- Buyer
+- Wild Case
+- Multiplier Chip
+- Red Phone
+- Counterfeit Printer
+- Vault Key
+- EMP
+
+Vault modifier art covers:
+
+- Counterfeit Printer
+- Golden Key
+- Inside Man
+- Black Card
+- EMP
+- Red Phone
+- Double Agent
+- Marked Lot
+
+Bonus UI art covers:
+
+- Auction Hammer
+- Vault Door
+- Wild Transformation
+- Multiplier Increase
+- Cascade Win
+- Big Win
+
+## Recommended next implementation phase
+
+1. Add a **BUY ACCESS** button/panel to the audience demo without disturbing the reference-matched idle composition.
+2. Build a premium three-card modal: Backroom Pass / Vault Access / Black Card.
+3. Add a confirmation state with exact ×Bet cost.
+4. Add auction-hammer → ACCESS GRANTED → vault transition.
+5. Build The Vault bonus presentation using the committed trigger/modifier assets.
+6. Implement demo-only feature behavior behind an explicit local-demo boundary.
+7. Keep production sessions stateless and RGS-driven.
+8. Build real math modes separately; do not hard-code prototype prices/probabilities into production math.
+
+## Reference geometry
+
+Primary design reference canvas: **1671×941**.
+
+Approximate reel boundaries retained for QA:
 
 ```text
 x: 382, 558, 735, 912, 1091, 1273
 y: 109, 284, 449, 614, 779
 ```
 
-This yields a 5×4 grid occupying approximately:
-
-```text
-left:   22.86%
-top:    11.58%
-width:  53.32%
-height: 71.20%
-```
-
-Use these boundaries as the starting point, then visually tune by a few pixels against the reference.
-
-### Reference symbols
-
-The visible reference board uses these 10 symbol types:
-
-- watch
-- diamond
-- ace
-- gold
-- cash
-- passport
-- bag
-- bust
-- wild
-- vip
-
-Initial visual board in the reference, row-major:
+Reference initial board, row-major:
 
 ```text
 watch    diamond   ace       gold      cash
@@ -76,11 +125,7 @@ gold     cash      watch     diamond   passport
 bust     wild      vip       bag       ace
 ```
 
-For the closest match, crop/extract the actual visual symbol tiles from the reference image instead of using the simple SVG placeholders in `assets/symbols/`.
-
-## Control layout
-
-Approximate control centers on the 1671×941 reference:
+Reference control centers:
 
 ```text
 menu       231, 847
@@ -93,76 +138,9 @@ autoplay   1250, 847
 turbo      1400, 847
 ```
 
-Suggested click/hit rectangles:
-
-```text
-menu       x188  y803  w82   h84
-minus      x574  y816  w62   h62
-plus       x794  y816  w62   h62
-spin       x1034 y777  w138  h138
-autoplay   x1178 y813  w148  h66
-turbo      x1334 y813  w132  h66
-```
-
-Convert to percentages so the controls scale with the reference stage.
-
-## Required demo behavior
-
-The reference-matched demo should support:
-
-- Spin button
-- Spacebar spin
-- Bet − / +
-- Turbo toggle
-- Autoplay toggle
-- Menu / game-info modal
-- Balance deduction and win credit
-- Reel/symbol animation
-- Highlighted wins
-- Responsive scale-down on mobile without destroying the reference composition
-
-Suggested demo balance/bet defaults:
-
-```text
-balance: 991.30
-bet: 1.00
-bet steps: [0.10, 0.20, 0.50, 1, 2, 5, 10]
-```
-
-This is an audience prototype only. Do not imply that the production math, RTP, max win, or certification is final.
-
-## Visual target
-
-Match the reference, not the older generic demo styling:
-
-- warm daylight luxury auction hall
-- cream marble floor
-- tall arched windows
-- black/gold reel frame
-- exact 5×4 tile proportions
-- left-side THE BLACK MARKET title block
-- right-side vertical slogan and LOT 001 display
-- smoked translucent bottom HUD
-- oversized circular Spin button
-- compact pill-shaped Autoplay and Turbo buttons
-- typography, spacing, shadows and gold tone as close as practical
-
-The idle state should be visually almost indistinguishable from the reference screenshot at the same aspect ratio.
-
-## Recommended implementation approach
-
-1. Use the reference screenshot as the compositional base layer during reconstruction.
-2. Rebuild the reel grid as a precise absolute-position overlay.
-3. Crop the 10 symbol tile appearances from the reference into dedicated assets.
-4. Place interactive symbols in the exact tile rectangles.
-5. Recreate/patch the HUD text areas so Balance and Bet can update dynamically without visibly diverging from the reference.
-6. Use invisible absolute-position hit targets over Menu, −, +, Spin, Autoplay and Turbo.
-7. Add short premium animations only; avoid flashy generic casino effects.
-8. Test at 1671×941 first, then 1440×810, 1920×1080, and mobile landscape.
-
 ## Local run
 
-The `demo/` directory is plain static HTML/CSS/JS, so no package install is required for it.
+Audience demo:
 
 ```bash
 git clone https://github.com/Bahrain-AI/black-market-slot.git
@@ -172,11 +150,9 @@ python3 -m http.server 8080
 
 Open:
 
-```text
-http://localhost:8080/demo/
-```
+`http://localhost:8080/demo/`
 
-For the Svelte/Stake Engine app:
+Stake Engine / Svelte app:
 
 ```bash
 nvm use
@@ -185,19 +161,11 @@ pnpm install
 pnpm dev
 ```
 
-## Acceptance criteria for the next agent
+## Non-negotiable constraints
 
-Do not call the work complete until:
-
-1. The idle browser screenshot is extremely close to the supplied reference at 1671×941.
-2. All 20 reel cells align with the reference grid.
-3. Spin, Bet −/+, Turbo, Autoplay and Menu are functional.
-4. The initial board exactly matches the reference image.
-5. The interface remains usable in mobile landscape and scales proportionally.
-6. `demo/` contains no external runtime dependencies.
-7. The existing Stake Engine integration under `src/` is not broken.
-8. The public raw.githack URL works after commit.
-
-## Known caution
-
-The current `demo/ref/*.js` files are WIP encoded reference-image chunks from an interrupted approach. Inspect them before deciding whether to reuse or delete them. A cleaner implementation may replace them with normal optimized WebP assets.
+- Do not claim production RTP / max win / Bonus Buy pricing is final until the math package proves it.
+- Do not fabricate Stake Engine books/LUTs.
+- Preserve the reference-matched demo visual quality while adding features.
+- Preserve RGS/replay integration under `src/`.
+- Keep audience-demo outcomes clearly separate from production behavior.
+- Keep runtime assets local; no external CDN dependency.

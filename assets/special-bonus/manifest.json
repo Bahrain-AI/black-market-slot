@@ -1,0 +1,56 @@
+{
+  "pack": "BLACK MARKET Special Bonus Assets",
+  "version": 1,
+  "status": "prototype visual assets; production math pending",
+  "atlases": {
+    "bonus-triggers.svg": {
+      "columns": 4,
+      "rows": 2,
+      "cell": [256, 256],
+      "entries": [
+        {"id":"scatter","index":0,"label":"SCATTER","effect":"bonus trigger / upgrade"},
+        {"id":"buyer","index":1,"label":"BUYER","effect":"convert selected symbols to WILD"},
+        {"id":"wild-case","index":2,"label":"WILD CASE","effect":"spawn WILD positions"},
+        {"id":"multiplier-chip","index":3,"label":"MULTIPLIER","effect":"increase active multiplier"},
+        {"id":"red-phone","index":4,"label":"RED PHONE","effect":"random multiplier upgrade"},
+        {"id":"counterfeit-printer","index":5,"label":"PRINTER","effect":"duplicate selected symbol"},
+        {"id":"vault-key","index":6,"label":"VAULT KEY","effect":"unlock premium symbol"},
+        {"id":"emp","index":7,"label":"EMP","effect":"remove low-value symbols"}
+      ]
+    },
+    "vault-modifiers.svg": {
+      "columns": 4,
+      "rows": 2,
+      "cell": [256, 256],
+      "entries": [
+        {"id":"counterfeit-printer","index":0,"effect":"persistent symbol duplication"},
+        {"id":"golden-key","index":1,"effect":"guarantee / boost premium symbols"},
+        {"id":"inside-man","index":2,"effect":"increase Buyer appearances"},
+        {"id":"black-card","index":3,"effect":"higher starting multiplier"},
+        {"id":"emp","index":4,"effect":"strip low-value symbols"},
+        {"id":"red-phone","index":5,"effect":"upgrade win multiplier"},
+        {"id":"double-agent","index":6,"effect":"upgrade two symbols"},
+        {"id":"marked-lot","index":7,"effect":"enhance one reel/position"}
+      ]
+    },
+    "bonus-ui.svg": {
+      "columns": 3,
+      "rows": 2,
+      "cell": [320, 220],
+      "entries": [
+        {"id":"auction-hammer","index":0},
+        {"id":"vault-door","index":1},
+        {"id":"wild-transformation","index":2},
+        {"id":"multiplier-increase","index":3},
+        {"id":"cascade-win","index":4},
+        {"id":"big-win","index":5}
+      ]
+    }
+  },
+  "bonusBuyModes": [
+    {"id":"backroom-pass","prototypeCostX":60},
+    {"id":"vault-access","prototypeCostX":100},
+    {"id":"black-card","prototypeCostX":200}
+  ],
+  "multiplierVisualTiers": [2,3,5,10,25]
+}
