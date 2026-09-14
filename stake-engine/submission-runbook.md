@@ -71,7 +71,14 @@ Verify the generated package before upload:
 python math/tools/verify_sdk_books.py                    # book event contract
 python math/tools/validate_delivery.py --package <approved-output>   # cross-file checks
 python math/tools/smoke_sdk_state.py                     # determinism + contract smoke
+python math/tools/find_sdk_replays.py                    # replay IDs per mode -> replay_manifest.json
 ```
+
+`find_sdk_replays.py` writes `replay_manifest.json` beside `publish_files/` with
+the book ID per mode for `loss` / `low_win` / `mid_win` / `high_win` / `max_win`
+— the IDs to use for the `replay=true&event=<mode>/<id>` staging checks in §6.
+Regenerate it with the approved production books; buy modes have no true loss by
+design, so the closest category record (lowest payout) is listed for them.
 
 Until approved inputs are available, run the provisional builders only to prove
 the pipeline:

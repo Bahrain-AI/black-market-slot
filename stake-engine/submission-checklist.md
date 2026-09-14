@@ -17,6 +17,7 @@
 - [x] Typed, deterministic playback covers reveal, cascades, expanding Wilds, Free Spins multiplier state, Hold & Spin locks, payout, and round end.
 - [x] Production frontend contains no outcome RNG; local demo events are isolated fixtures.
 - [x] Ordered event indices are validated before playback and state reducers reject non-monotonic events.
+- [x] Frontend round-book parser acceptance tests (`src/game/engine/roundBook.test.ts`) consume verbatim SDK book payloads covering all 16 event types (base cascade, Free Spins multiplier advance, Hold & Spin incl. a new lock landing during respins); 15 frontend tests pass, `svelte-check` clean, production build green.
 - [x] Rules / game-information modal is config-driven (`src/game/config/rules.ts`), rendering features, bet modes, provisional RTP and max win from a single source of truth.
 - [ ] Final rules/paytable populated from approved math values.
 - [ ] Verify exact win increment animation against every multi-event result.
@@ -46,7 +47,7 @@
 - [x] Zstandard compression and decompression integrity are covered by automated tests.
 - [ ] Final production result books are generated as `.jsonl.zst`.
 - [ ] PAR / statistics review completed: RTP, hit rate, volatility, max-win frequency.
-- [ ] Replay event IDs recorded for loss, normal win, big win and max win for every mode.
+- [x] Replay event IDs recorded for loss, normal win, big win and max win for every mode (`math/tools/find_sdk_replays.py` writes `replay_manifest.json` next to the published books; buy modes have no true loss by design — closest category records listed). Regenerate on the approved production books.
 
 ## Product / compliance
 - [x] Game is stateless: no jackpot, gamble, continuation, or early-cashout mechanic.

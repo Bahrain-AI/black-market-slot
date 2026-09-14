@@ -63,6 +63,18 @@ python math/tools/verify_sdk_books.py
 
 `verify_sdk_books.py` decompresses every `books_<mode>.jsonl.zst`, asserts that only the 16 contract event types appear, every payload key required by the contract is present, amounts are integer hundredths, and every round is coherent (exactly one `payout` + `roundEnd`; `roundEnd.payoutMultiplier` == `payout.amount` == `payout.total` == book `payoutMultiplier`; uncapped `baseGameWins` + `freeGameWins` ≥ the capped multiplier).
 
+Record the per-mode replay IDs needed for staging validation:
+
+```text
+python math/tools/find_sdk_replays.py
+```
+
+`find_sdk_replays.py` scans the published books and writes `replay_manifest.json`
+next to `publish_files/` with a `loss` / `low_win` / `mid_win` / `high_win` /
+`max_win` book ID per mode (buy modes have no true loss by design — the closest
+category records are listed instead). Re-run it after regenerating on the
+approved production inputs so the IDs point at the shipped books.
+
 The repository does **not** contain fabricated production math. Final RTP, hit rate, volatility, payout table, and max-win frequency must be produced and verified from the approved simulation set before submission.
 
 ## Provisional round simulator and publication pipeline

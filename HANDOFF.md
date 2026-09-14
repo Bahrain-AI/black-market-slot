@@ -144,6 +144,16 @@ coherence including wincap caps. `run.py` also cleans stale
 recreates `_0` when missing), so re-runs at different scales always publish LUTs
 matching the fresh books.
 
+`math/tools/find_sdk_replays.py` scans the published books and records the
+per-mode replay IDs for `loss` / `low_win` / `mid_win` / `high_win` / `max_win`
+into `replay_manifest.json` beside `publish_files/` (IDs for the §6 staging
+`replay=true&event=<mode>/<id>` checks; buy modes list closest-category records
+since they have no true loss). The frontend now has parser acceptance tests,
+`src/game/engine/roundBook.test.ts`, that feed verbatim SDK book payloads (base
+cascade, Free Spins multiplier advance, Hold & Spin incl. a new lock) through
+`parseRoundBook` — 9 new tests on top of 6 existing; `svelte-check` and the
+production `vite build` stay clean.
+
 Statistically, the provisional payouts remain deliberately unoptimized and
 off-target (base ~118%, backroom ~18.2%, vault ~4.8%, black_card ~7.8% at full
 scale, calculated against buy costs) — pipeline proofs only.
