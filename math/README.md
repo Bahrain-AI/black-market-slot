@@ -22,6 +22,23 @@ python math/tools/bootstrap_sdk.py
 
 This repository does not copy or silently drift the SDK runtime. BLACK MARKET's final SDK `GameConfig`, reel strips, paytable, distributions, and optimized weights remain pending approved math design and large-scale simulation.
 
+## SDK game overlay
+
+The repository-owned provisional overlay under `math/sdk_game/black_market/` is the BLACK MARKET single source for the SDK game configuration:
+
+- `game_config.py` — SDK `Config` subclass: 5×4 board, symbol configuration, provisional paytable, provisional reel inputs (`BR0`/`FR0`/`HR0`), base/Free Spins/Hold & Spin distributions, BetMode definitions matching the Bonus Buy modes (base, backroom, vault, black_card), and the max-win / provisional-RTP hooks (`wincap`, `rtp`, `provisional`).
+- `game_events.py` — deterministic event mapping into the frontend contract (`reveal` … `roundEnd`), emitting through the SDK-shaped `book.add_event` interface.
+- `reels/*.csv` — provisional weighted reel inputs, clearly not approved production strips.
+
+Staging and smoke check (requires the local pinned checkout from `bootstrap_sdk.py`):
+
+```text
+python math/tools/bootstrap_sdk.py
+python math/tools/smoke_sdk_game.py
+```
+
+`bootstrap_sdk.py` stages the overlay into the checkout (`games/black_market/`) after validating the pinned revision. The smoke test instantiates `GameConfig` inside the staged checkout and asserts the configuration, all Bonus Buy modes, and the complete frontend event mapping. Generated SDK checkouts are ignored by Git.
+
 The repository does **not** contain fabricated production math. Final RTP, hit rate, volatility, payout table, and max-win frequency must be produced and verified from the approved simulation set before submission.
 
 ## Required publication output

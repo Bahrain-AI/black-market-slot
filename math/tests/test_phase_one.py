@@ -15,7 +15,13 @@ from black_market.output import (
     write_index,
     write_uncompressed_mode,
 )
-from black_market.sdk import SDK_COMMIT, SDK_REPOSITORY, SDK_REQUIRED_SYMBOLS, validate_sdk_checkout
+from black_market.sdk import (
+    SDK_COMMIT,
+    SDK_REPOSITORY,
+    SDK_REQUIRED_SYMBOLS,
+    stage_sdk_game,
+    validate_sdk_checkout,
+)
 
 
 class PhaseOneMathTests(unittest.TestCase):
@@ -108,6 +114,15 @@ class PhaseOneMathTests(unittest.TestCase):
 
             self.assertEqual(report["repository"], SDK_REPOSITORY)
             self.assertEqual(report["commit"], SDK_COMMIT)
+
+            source = root / "overlay"
+            (source / "reels").mkdir(parents=True)
+            (source / "game_config.py").write_text("PROVISIONAL = True\n", encoding="utf-8")
+            (source / "game_events.py").write_text("", encoding="utf-8")
+            (source / "reels/BR0.csv").write_text("H1,H1,H1,H1,H1\n", encoding="utf-8")
+            staged = stage_sdk_game(root, source=source, allow_revision_marker=True)
+            self.assertEqual(staged["gameId"], "black_market")
+            self.assertTrue((root / "games/black_market/game_config.py").is_file())
 
 
 if __name__ == "__main__": unittest.main()

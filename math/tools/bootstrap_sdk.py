@@ -9,7 +9,7 @@ import sys
 MATH_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(MATH_ROOT))
 
-from black_market.sdk import SDK_COMMIT, SDK_REPOSITORY, validate_sdk_checkout
+from black_market.sdk import SDK_COMMIT, SDK_REPOSITORY, stage_sdk_game, validate_sdk_checkout
 
 
 def run(command: list[str], cwd: Path | None = None) -> None:
@@ -19,11 +19,14 @@ def run(command: list[str], cwd: Path | None = None) -> None:
 def bootstrap(destination: Path) -> dict[str, object]:
     destination = destination.resolve()
     if destination.exists():
-        return validate_sdk_checkout(destination)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    run(["git", "clone", "--filter=blob:none", "--no-checkout", SDK_REPOSITORY, str(destination)])
-    run(["git", "checkout", SDK_COMMIT], cwd=destination)
-    return validate_sdk_checkout(destination)
+        report = validate_sdk_checkout(destination)
+    else:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        run(["git", "clone", "--filter=blob:none", "--no-checkout", SDK_REPOSITORY, str(destination)])
+        run(["git", "checkout", SDK_COMMIT], cwd=destination)
+        report = validate_sdk_checkout(destination)
+    report["game"] = stage_sdk_game(destination)
+    return report
 
 
 if __name__ == "__main__":

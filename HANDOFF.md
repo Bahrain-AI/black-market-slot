@@ -1,6 +1,6 @@
 # BLACK MARKET — Project Handoff
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 ## Phase 1 Stake Engine architecture
 
@@ -99,6 +99,16 @@ Bonus UI art covers:
 - Multiplier Increase
 - Cascade Win
 - Big Win
+
+## Latest addition — Stake Engine SDK game overlay
+
+The provisional BLACK MARKET overlay for the pinned official Stake Engine Math SDK now lives repository-side under `math/sdk_game/black_market/`:
+
+- `game_config.py` — SDK-native `Config` subclass: 5×4 board, symbols (H1–H4, L1–L4, W, S, P), provisional paytable, provisional reels (`BR0`/`FR0`/`HR0`), base-game / Free Spins (`1× → 2× → 3× → 5× → 10×`) / Hold & Spin distributions, BetModes for all Bonus Buy modes (base, backroom, vault, black_card), `wincap` max-win and provisional RTP (0.96) hooks, `provisional = True`.
+- `game_events.py` — maps all 16 frontend event types through the SDK `book.add_event` interface with monotonic indices and the exact payload keys the frontend `src/game/events/types.ts` contract requires.
+- `reels/*.csv` — provisional weighted reel inputs (not approved production strips).
+
+`python math/tools/bootstrap_sdk.py` now stages the overlay into the pinned checkout (`games/black_market/`) after revision validation, and `python math/tools/smoke_sdk_game.py` proves the staged `GameConfig` instantiates against the pinned SDK and that every frontend event maps correctly. All overlay values remain configuration-driven and explicitly provisional; nothing here is certified production math.
 
 ## Recommended next implementation phase
 

@@ -2,6 +2,7 @@
 
 import ast
 from pathlib import Path
+import shutil
 import subprocess
 
 SDK_REPOSITORY = "https://github.com/StakeEngine/math-sdk.git"
@@ -22,6 +23,8 @@ SDK_REQUIRED_SYMBOLS = {
     "src/write_data/write_configs.py": {"generate_configs"},
     "utils/rgs_verification.py": {"execute_all_tests"},
 }
+GAME_ID = "black_market"
+OVERLAY_REQUIRED_FILES = ("game_config.py", "game_events.py")
 
 
 def _checkout_revision(root: Path, allow_revision_marker: bool) -> str:
@@ -66,3 +69,33 @@ def validate_sdk_checkout(root: Path, *, allow_revision_marker: bool = False) ->
         "requiredFiles": len(SDK_REQUIRED_FILES),
         "requiredSymbols": sum(len(symbols) for symbols in SDK_REQUIRED_SYMBOLS.values()),
     }
+
+
+def stage_sdk_game(
+    sdk_root: Path,
+    *,
+    source: Path | None = None,
+    allow_revision_marker: bool = False,
+) -> dict[str, object]:
+    """Copy the repository-owned game overlay into a validated SDK checkout."""
+    validate_sdk_checkout(sdk_root, allow_revision_marker=allow_revision_marker)
+    source = (source or Path(__file__).resolve().parents[1] / "sdk_game" / GAME_ID).resolve()
+    missing = [name for name in OVERLAY_REQUIRED_FILES if not (source / name).is_file()]
+    reel_files = sorted((source / "reels").glob("*.csv")) if (source / "reels").is_dir() else []
+    if missing or not reel_files:
+        details = missing + (["reels/*.csv"] if not reel_files else [])
+        raise ValueError(f"BLACK MARKET SDK overlay is missing: {', '.join(details)}")
+
+    target = (sdk_root.resolve() / "games" / GAME_ID).resolve()
+    target.mkdir(parents=True, exist_ok=True)
+    copied: list[str] = []
+    for item in source.rglob("*"):
+        if not item.is_file() or "__pycache__" in item.parts:
+            continue
+        relative = item.relative_to(source)
+        destination = target / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(item, destination)
+        copied.append(relative.as_posix())
+    (target / ".black-market-overlay").write_text(SDK_COMMIT + "\n", encoding="utf-8")
+    return {"gameId": GAME_ID, "target": str(target), "copiedFiles": sorted(copied)}

@@ -27,7 +27,9 @@
 - [x] Phase 1 deterministic helpers cover cascades, expanding Wilds, progressive multiplier state, and persistent Hold & Spin locks.
 - [x] Validated uncompressed JSONL, lookup CSV, `index.json`, and `.jsonl.zst` generation hooks exist.
 - [x] Official Stake Engine Math SDK checkout is pinned to commit `307e6812b38489e212f835001f21e9f7d4c18a4d`; bootstrap validates the revision and required SDK interfaces.
-- [ ] Final game logic implemented with Stake Engine Math SDK or equivalent compatible generator.
+- [x] Provisional BLACK MARKET SDK game overlay (`math/sdk_game/black_market/`) stages into the pinned checkout as `games/black_market/`; configures 5×4 board, symbols, provisional reels, base/Free Spins/Hold & Spin mechanics, Bonus Buy modes, and max-win/RTP hooks.
+- [x] SDK smoke test (`math/tools/smoke_sdk_game.py`) instantiates `GameConfig` against the pinned checkout and proves all 16 frontend event types map through an SDK-shaped book with valid indices and payloads.
+- [ ] Final game logic implemented with approved production inputs in the SDK overlay (current overlay inputs remain explicitly provisional).
 - [ ] 100k+ diverse simulations generated for each production mode (recommended by Engine docs).
 - [ ] Weighted lookup tables optimized to final RTP.
 - [x] Local artifact validator checks exact `payoutMultiplier` matches between every result book and lookup row.
