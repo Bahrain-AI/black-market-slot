@@ -5,9 +5,14 @@ export class SymbolRenderer extends Container {
   private readonly frame = new Graphics();
   private readonly sprite: Sprite;
   private readonly caption: Text;
+  private currentName = '';
+  readonly reel: number;
+  readonly row: number;
 
-  constructor(symbol: SymbolData, texture: Texture, readonly reel: number, readonly row: number) {
+  constructor(symbol: SymbolData, texture: Texture, reel: number, row: number) {
     super();
+    this.reel = reel;
+    this.row = row;
     this.frame.roundRect(3, 3, 154, 134, 8).fill({ color: 0x100d0a, alpha: 0.92 }).stroke({ color: 0xb89555, width: 2 });
     this.sprite = new Sprite(texture);
     this.sprite.anchor.set(0.5);
@@ -21,7 +26,12 @@ export class SymbolRenderer extends Container {
     this.update(symbol, texture);
   }
 
+  get name(): string {
+    return this.currentName;
+  }
+
   update(symbol: SymbolData, texture: Texture) {
+    this.currentName = symbol.name;
     this.sprite.texture = texture;
     this.caption.text = symbol.value ? `${symbol.value}×${symbol.multiplier ?? 1}` : (symbol.name === 'empty' ? '' : symbol.name.toUpperCase());
     this.alpha = symbol.name === 'empty' ? 0 : 1;

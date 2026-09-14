@@ -11,6 +11,14 @@ export class ReelRenderer extends Container {
 
   constructor(private readonly textures: Record<string, Texture>) { super(); }
 
+  getCell(reel: number, row: number): SymbolRenderer | undefined {
+    return this.symbols[reel]?.[row];
+  }
+
+  allCells(): SymbolRenderer[] {
+    return this.symbols.flat();
+  }
+
   setBoard(board: Board) {
     this.removeChildren();
     this.symbols = board.map((reel, reelIndex) => reel.map((symbol, rowIndex) => {
