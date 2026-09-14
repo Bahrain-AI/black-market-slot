@@ -25,14 +25,15 @@
 ## Math
 - [x] Phase 1 5×4 configuration and event contract scaffold exists under `math/black_market/`.
 - [x] Phase 1 deterministic helpers cover cascades, expanding Wilds, progressive multiplier state, and persistent Hold & Spin locks.
-- [x] Validated uncompressed JSONL, lookup CSV, `index.json`, and optional `.jsonl.zst` generation hooks exist.
-- [ ] Integrate and pin the official Stake Engine Math SDK runtime against the Phase 1 interfaces.
+- [x] Validated uncompressed JSONL, lookup CSV, `index.json`, and `.jsonl.zst` generation hooks exist.
+- [x] Official Stake Engine Math SDK checkout is pinned to commit `307e6812b38489e212f835001f21e9f7d4c18a4d`; bootstrap validates the revision and required SDK interfaces.
 - [ ] Final game logic implemented with Stake Engine Math SDK or equivalent compatible generator.
 - [ ] 100k+ diverse simulations generated for each production mode (recommended by Engine docs).
 - [ ] Weighted lookup tables optimized to final RTP.
-- [ ] `payoutMultiplier` values match exactly between result books and lookup tables.
-- [ ] `index.json` references every mode, cost, event book, and weight file.
-- [ ] Result books are `.jsonl.zst`.
+- [x] Local artifact validator checks exact `payoutMultiplier` matches between every result book and lookup row.
+- [x] Local artifact validator checks every `index.json` mode, cost, event book, and weight file reference.
+- [x] Zstandard compression and decompression integrity are covered by automated tests.
+- [ ] Final production result books are generated as `.jsonl.zst`.
 - [ ] PAR / statistics review completed: RTP, hit rate, volatility, max-win frequency.
 - [ ] Replay event IDs recorded for loss, normal win, big win and max win for every mode.
 

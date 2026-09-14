@@ -11,7 +11,16 @@ Stake Engine requires pre-generated, stateless outcomes. Production math should 
 - Board: 5 reels × 4 rows
 - Stateless rounds only
 
-Phase 1 logic now lives under `math/black_market/` and mirrors the frontend event contract for cascades, expanding Wilds, Free Spins, multiplier progression, and Hold & Spin. It includes deterministic calculation helpers, persistent feature state, mode configuration, validated JSONL/lookup/index writers, and an optional Zstandard compression hook. The official Stake Engine SDK still needs to be integrated for production simulation and optimization.
+Phase 1 logic lives under `math/black_market/` and mirrors the frontend event contract for cascades, expanding Wilds, Free Spins, multiplier progression, and Hold & Spin. It includes deterministic calculation helpers, persistent feature state, mode configuration, JSONL/lookup/index writers, Zstandard compression, and full cross-file validation.
+
+The official SDK integration is pinned to commit `307e6812b38489e212f835001f21e9f7d4c18a4d`. The bootstrap command creates a local, ignored checkout and refuses a different revision:
+
+```text
+python -m pip install -r math/requirements.txt
+python math/tools/bootstrap_sdk.py
+```
+
+This repository does not copy or silently drift the SDK runtime. BLACK MARKET's final SDK `GameConfig`, reel strips, paytable, distributions, and optimized weights remain pending approved math design and large-scale simulation.
 
 The repository does **not** contain fabricated production math. Final RTP, hit rate, volatility, payout table, and max-win frequency must be produced and verified from the approved simulation set before submission.
 
@@ -41,7 +50,7 @@ math/publish_files/
 }
 ```
 
-Each JSONL result must contain `id`, `events`, and `payoutMultiplier`. Lookup rows must contain unsigned integer values in the order `simulation_id,weight,payout_multiplier`, and the payout multiplier must exactly match the corresponding book result.
+Each JSONL result must contain `id`, `events`, and `payoutMultiplier`. Payout multipliers use integer hundredths (`100` = `1.00x`) and non-zero values use the SDK/RGS `0.1x` increment. Lookup rows contain unsigned integer values in the order `simulation_id,weight,payout_multiplier`, and the payout multiplier must exactly match the corresponding book result.
 
 Engine recommends 100k+ production simulations per mode to create sufficient outcome diversity before optimization. Generate PAR/statistical output and verify RTP and max-win frequency before uploading math to ACP.
 
@@ -50,6 +59,7 @@ Engine recommends 100k+ production simulations per mode to create sufficient out
 ```text
 python -m unittest discover -s math/tests -v
 cd math && python -m black_market.run
+python math/tools/validate_artifacts.py <artifact-directory>
 ```
 
-The output hooks first write uncompressed JSONL so books and lookup rows can be cross-checked. Compression requires the approved Math SDK environment and `zstandard`; the final `index.json` must reference the compressed filenames after that verified step.
+The validator reads uncompressed or `.jsonl.zst` books, validates every event sequence, checks unique IDs and unsigned lookup fields, proves payout equality between each book and lookup row, and reports weighted RTP as a provisional audit value. Production `index.json` entries must reference compressed books. Generated SDK checkouts and math artifacts are ignored by Git.

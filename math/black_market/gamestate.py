@@ -29,4 +29,7 @@ class GameState:
         self.respins = 0
 
     def book(self, simulation_id: int) -> dict[str, Any]:
-        return {"id": simulation_id, "events": deepcopy(self.events), "payoutMultiplier": self.total_win}
+        # Stake Engine result books encode payout multipliers in hundredths.
+        # Keeping this as an integer prevents float drift between books and LUTs.
+        payout_multiplier = int(round(self.total_win * 100))
+        return {"id": simulation_id, "events": deepcopy(self.events), "payoutMultiplier": payout_multiplier}
