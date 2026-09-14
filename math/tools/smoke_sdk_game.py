@@ -10,28 +10,7 @@ import sys
 MATH_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(MATH_ROOT))
 
-from black_market.sdk import stage_sdk_game
-
-# Payload keys the frontend deterministic event contract requires per event type
-# (mirrors src/game/events/types.ts; every key must be present).
-FRONTEND_CONTRACT: dict[str, list[str]] = {
-    "reveal": ["board"],
-    "win": ["positions", "amount", "symbol"],
-    "cascade": ["cascade"],
-    "removeSymbols": ["positions"],
-    "collapse": ["board"],
-    "refill": ["board", "positions"],
-    "expandingWild": ["reel", "rows"],
-    "freeSpinsStart": ["total", "multiplier"],
-    "freeSpin": ["current", "total", "remaining"],
-    "multiplierIncrease": ["from", "to", "reason"],
-    "holdSpinStart": ["respins", "locked"],
-    "holdSpinLock": ["locks", "resetRespins"],
-    "holdSpinRespins": ["remaining"],
-    "holdSpinEnd": ["total"],
-    "payout": ["amount", "total"],
-    "roundEnd": ["payoutMultiplier"],
-}
+from black_market.sdk import FRONTEND_CONTRACT, stage_sdk_game
 
 
 def _check_program() -> str:
@@ -73,8 +52,13 @@ class Gamestate:
         self.book = Book()
 
 g = Gamestate()
+class Sym:
+    def __init__(self, n):
+        self.name = n
+
+g.board = [[Sym("H1")] * 4] * 5
 events = [
-    ("reveal", lambda: game_events.reveal(g, [["H1"] * 4] * 5)),
+    ("reveal", lambda: game_events.reveal(g)),
     ("win", lambda: game_events.win(g, [{"reel": 0, "row": 0}], 100, "H2")),
     ("cascade", lambda: game_events.cascade(g, 2)),
     ("removeSymbols", lambda: game_events.remove_symbols(g, [{"reel": 0, "row": 0}])),
@@ -123,10 +107,14 @@ def smoke(sdk_root: Path) -> dict[str, object]:
         [sys.executable, "-c", _check_program()],
         cwd=game_root,
         env=environment,
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
     )
+    if result.returncode != 0:
+        print(result.stdout)
+        print(result.stderr)
+        raise SystemExit(result.returncode)
     return json.loads(result.stdout)
 
 

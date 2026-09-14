@@ -23,8 +23,39 @@ SDK_REQUIRED_SYMBOLS = {
     "src/write_data/write_configs.py": {"generate_configs"},
     "utils/rgs_verification.py": {"execute_all_tests"},
 }
+# Payload keys the frontend deterministic event contract requires per event type
+# (mirrors src/game/events/types.ts; every key must be present in SDK books).
+FRONTEND_CONTRACT: dict[str, list[str]] = {
+    "reveal": ["board"],
+    "win": ["positions", "amount", "symbol"],
+    "cascade": ["cascade"],
+    "removeSymbols": ["positions"],
+    "collapse": ["board"],
+    "refill": ["board", "positions"],
+    "expandingWild": ["reel", "rows"],
+    "freeSpinsStart": ["total", "multiplier"],
+    "freeSpin": ["current", "total", "remaining"],
+    "multiplierIncrease": ["from", "to", "reason"],
+    "holdSpinStart": ["respins", "locked"],
+    "holdSpinLock": ["locks", "resetRespins"],
+    "holdSpinRespins": ["remaining"],
+    "holdSpinEnd": ["total"],
+    "payout": ["amount", "total"],
+    "roundEnd": ["payoutMultiplier"],
+}
+
 GAME_ID = "black_market"
-OVERLAY_REQUIRED_FILES = ("game_config.py", "game_events.py")
+OVERLAY_REQUIRED_FILES = (
+    "game_config.py",
+    "game_events.py",
+    "game_calculations.py",
+    "game_executables.py",
+    "game_override.py",
+    "gamestate.py",
+    "game_optimization.py",
+    "run.py",
+    "readme.txt",
+)
 
 
 def _checkout_revision(root: Path, allow_revision_marker: bool) -> str:

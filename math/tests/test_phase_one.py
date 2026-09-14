@@ -19,6 +19,7 @@ from black_market.sdk import (
     SDK_COMMIT,
     SDK_REPOSITORY,
     SDK_REQUIRED_SYMBOLS,
+    OVERLAY_REQUIRED_FILES,
     stage_sdk_game,
     validate_sdk_checkout,
 )
@@ -117,8 +118,8 @@ class PhaseOneMathTests(unittest.TestCase):
 
             source = root / "overlay"
             (source / "reels").mkdir(parents=True)
-            (source / "game_config.py").write_text("PROVISIONAL = True\n", encoding="utf-8")
-            (source / "game_events.py").write_text("", encoding="utf-8")
+            for name in OVERLAY_REQUIRED_FILES:
+                (source / name).write_text("PROVISIONAL = True\n", encoding="utf-8")
             (source / "reels/BR0.csv").write_text("H1,H1,H1,H1,H1\n", encoding="utf-8")
             staged = stage_sdk_game(root, source=source, allow_revision_marker=True)
             self.assertEqual(staged["gameId"], "black_market")

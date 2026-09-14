@@ -110,6 +110,44 @@ The provisional BLACK MARKET overlay for the pinned official Stake Engine Math S
 
 `python math/tools/bootstrap_sdk.py` now stages the overlay into the pinned checkout (`games/black_market/`) after revision validation, and `python math/tools/smoke_sdk_game.py` proves the staged `GameConfig` instantiates against the pinned SDK and that every frontend event maps correctly. All overlay values remain configuration-driven and explicitly provisional; nothing here is certified production math.
 
+## Latest addition — SDK-native pipeline runs end-to-end
+
+The official Stake Engine pipeline now completes against the staged game from
+the SDK root:
+
+```text
+cd math/.stake-engine/math-sdk
+$env:PYTHONPATH="<absolute sdk root>"
+python games/black_market/run.py
+```
+
+`run.py` chains the official stages — `create_books` → `generate_configs` →
+`create_stat_sheet` → `execute_all_tests` — at 25k / 10k / 10k / 10k sims
+(overridable via `BLM_{BASE,BACKROOM,VAULT,BLACK_CARD}_SIMS`). Full run output:
+
+- Books (`books_<mode>.jsonl.zst`), LUTs (`lookUpTable_<mode>_0.csv`),
+  force files, `books_<mode>.verification.json` (SHA-256 + payout hash) per mode
+- `index.json`, `config.json`, `math_config.json`, `config_fe_black_market.json`,
+  `event_config_<mode>.json` via `generate_configs`
+- `black_market_full_statistics.xlsx` + `statistics_summary.json` via
+  `create_stat_sheet`
+- Engine `execute_all_tests` format/consistency checks complete (RTP/volatility
+  violations are expected warnings for the provisional inputs)
+
+Verified against the frontend contract: `math/tools/verify_sdk_books.py`
+decompressed all 4.92M book events across the 4 modes — 0 errors, only the 16
+contract types, integer-hundredth amounts, one coherent `payout`+`roundEnd` per
+book. State smoke (`math/tools/smoke_sdk_state.py`) and the new in-process tests
+(`math/tests/test_sdk_native.py`) prove deterministic replay and wallet↔book
+coherence including wincap caps. `run.py` also cleans stale
+`lookUpTable_<mode>_0.csv` copies the SDK would otherwise keep (it only
+recreates `_0` when missing), so re-runs at different scales always publish LUTs
+matching the fresh books.
+
+Statistically, the provisional payouts remain deliberately unoptimized and
+off-target (base ~118%, backroom ~18.2%, vault ~4.8%, black_card ~7.8% at full
+scale, calculated against buy costs) — pipeline proofs only.
+
 ## Submission package and provisional pipeline
 
 The full Stake Engine publication pipeline is now exercised end-to-end at development scale:

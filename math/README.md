@@ -30,14 +30,38 @@ The repository-owned provisional overlay under `math/sdk_game/black_market/` is 
 - `game_events.py` — deterministic event mapping into the frontend contract (`reveal` … `roundEnd`), emitting through the SDK-shaped `book.add_event` interface.
 - `reels/*.csv` — provisional weighted reel inputs, clearly not approved production strips.
 
-Staging and smoke check (requires the local pinned checkout from `bootstrap_sdk.py`):
+Staging and smoke checks (require the local pinned checkout from `bootstrap_sdk.py`):
 
 ```text
 python math/tools/bootstrap_sdk.py
-python math/tools/smoke_sdk_game.py
+python math/tools/smoke_sdk_game.py          # config-level: 16 event mappings, modes
+python math/tools/smoke_sdk_state.py         # state-level: determinism + contract, 4 modes
+python -m unittest math/tests/test_sdk_native.py   # SDK-native contract / replay tests
 ```
 
-`bootstrap_sdk.py` stages the overlay into the checkout (`games/black_market/`) after validating the pinned revision. The smoke test instantiates `GameConfig` inside the staged checkout and asserts the configuration, all Bonus Buy modes, and the complete frontend event mapping. Generated SDK checkouts are ignored by Git.
+`bootstrap_sdk.py` stages the overlay into `games/black_market/` after revision validation. `smoke_sdk_game.py` instantiates `GameConfig` inside the staged checkout and asserts the configuration, all Bonus Buy modes, and the complete frontend event mapping. `smoke_sdk_state.py` and `test_sdk_native.py` drive the staged `GameState` directly and assert deterministic replay (same seed → same book), the typed 16-event contract with monotonic indices and integer-hundredth amounts, wallet↔book coherence (including wincap caps), and Free Spins / Hold & Spin sequencing.
+
+## SDK-native pipeline
+
+The official Stake Engine pipeline runs end-to-end against the staged game from
+the SDK root (cwd matters — `execute_all_tests` resolves relative
+`games/black_market/...` paths):
+
+```text
+cd math/.stake-engine/math-sdk
+$env:PYTHONPATH="<absolute sdk root>"
+python games/black_market/run.py
+```
+
+`run.py` executes the official stages in order: `create_books` (books, lookup tables, force files, verification sidecars), `generate_configs` (BE/FE/math configs + `index.json`), `create_stat_sheet` (PAR-style statistics + `statistics_summary.json` + `.xlsx`), and `execute_all_tests` (RTP/format/consistency checks). Simulation counts default to 25k / 10k / 10k / 10k and can be overridden via `BLM_{BASE,BACKROOM,VAULT,BLACK_CARD}_SIMS`. `run.py` first removes stale `lookUpTable_<mode>_0.csv` copies it would otherwise inherit (the SDK only recreates the `_0` file when it is missing), so the published LUT ids always match the freshly generated books.
+
+Verify the published books against the frontend contract:
+
+```text
+python math/tools/verify_sdk_books.py
+```
+
+`verify_sdk_books.py` decompresses every `books_<mode>.jsonl.zst`, asserts that only the 16 contract event types appear, every payload key required by the contract is present, amounts are integer hundredths, and every round is coherent (exactly one `payout` + `roundEnd`; `roundEnd.payoutMultiplier` == `payout.amount` == `payout.total` == book `payoutMultiplier`; uncapped `baseGameWins` + `freeGameWins` ≥ the capped multiplier).
 
 The repository does **not** contain fabricated production math. Final RTP, hit rate, volatility, payout table, and max-win frequency must be produced and verified from the approved simulation set before submission.
 
@@ -107,7 +131,10 @@ Engine recommends 100k+ production simulations per mode to create sufficient out
 python -m unittest discover -s math/tests -v
 cd math && python -m black_market.run
 python math/tools/smoke_sdk_game.py
+python math/tools/smoke_sdk_state.py
+python -m unittest math/tests/test_sdk_native.py
+python math/tools/verify_sdk_books.py
 python math/tools/validate_delivery.py --package <artifact-directory>
 ```
 
-The simulator tests exercise seeded determinism, contract compliance, forced-feature mode event coverage, and paytable band accuracy across all four bet modes. The delivery validator cross-checks every book/LUT pay offset and every `index.json` entry against its compressed result. The SDK smoke test validates the staged overlay configuration and all 16 frontend event mappings. Generated SDK checkouts and math artifacts are ignored by Git.
+The simulator tests exercise seeded determinism, contract compliance, forced-feature mode event coverage, and paytable band accuracy across all four bet modes. The SDK-native tests exercise the staged `GameState` inside the pinned checkout: round contract across all mode/criteria buckets, deterministic replay, Free Spins multiplier progression, Hold & Spin locked totals, and wallet↔book accumulation. The delivery validator cross-checks every book/LUT pay offset and every `index.json` entry against its compressed result; `verify_sdk_books.py` checks the generated Engine books against the frontend event contract. Generated SDK checkouts and math artifacts are ignored by Git.
