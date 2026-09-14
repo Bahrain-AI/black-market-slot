@@ -23,7 +23,7 @@ export type AuthenticateResponse = {
 
 export type PlayResponse = {
   balance?: { amount: number; currency: string };
-  round?: Record<string, any>;
+  round?: Record<string, unknown>;
   error?: unknown;
 };
 

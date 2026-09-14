@@ -13,12 +13,20 @@
 - [x] Sound control exists.
 - [x] Replay mode disables wallet play and uses replay endpoint.
 - [x] Responsive layout for desktop, mobile, and small popout view.
+- [x] Production reels and symbols render through one PixiJS 8 Application mounted by Svelte 5.
+- [x] Typed, deterministic playback covers reveal, cascades, expanding Wilds, Free Spins multiplier state, Hold & Spin locks, payout, and round end.
+- [x] Production frontend contains no outcome RNG; local demo events are isolated fixtures.
+- [x] Ordered event indices are validated before playback and state reducers reject non-monotonic events.
 - [ ] Final rules/paytable populated from approved math values.
 - [ ] Verify exact win increment animation against every multi-event result.
 - [ ] Validate all currencies/languages in Engine staging.
 - [ ] Browser network/console must be clean during review.
 
 ## Math
+- [x] Phase 1 5×4 configuration and event contract scaffold exists under `math/black_market/`.
+- [x] Phase 1 deterministic helpers cover cascades, expanding Wilds, progressive multiplier state, and persistent Hold & Spin locks.
+- [x] Validated uncompressed JSONL, lookup CSV, `index.json`, and optional `.jsonl.zst` generation hooks exist.
+- [ ] Integrate and pin the official Stake Engine Math SDK runtime against the Phase 1 interfaces.
 - [ ] Final game logic implemented with Stake Engine Math SDK or equivalent compatible generator.
 - [ ] 100k+ diverse simulations generated for each production mode (recommended by Engine docs).
 - [ ] Weighted lookup tables optimized to final RTP.

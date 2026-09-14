@@ -2,6 +2,12 @@
 
 Last updated: 2026-09-13
 
+## Phase 1 Stake Engine architecture
+
+The production path now uses Svelte 5 for wallet/UI lifecycle and one PixiJS 8 Application for reels, symbols, and ordered feature playback. Typed events and reducers cover cascades, expanding Wilds, Free Spins with the configured `1× → 2× → 3× → 5× → 10×` progression, and persistent Hold & Spin locks. `src/game/engine/demoRounds.ts` is the only production-source demo fixture; RGS and replay sessions consume supplied event books without frontend outcome RNG.
+
+The Python package under `math/black_market/` mirrors the frontend contract and provides Phase 1 calculation/state/output interfaces. It is not final production math. Official SDK integration, production simulations, RTP optimization, compression validation, and Engine staging remain required.
+
 Repository: `https://github.com/Bahrain-AI/black-market-slot`
 
 Public demo: `https://raw.githack.com/Bahrain-AI/black-market-slot/main/demo/index.html`

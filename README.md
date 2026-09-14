@@ -12,7 +12,7 @@
 
 <p align="center">
   <strong>RARE ITEMS. BIGGER STORIES.</strong><br/>
-  Stake Engine-ready frontend · Svelte 5 · Vite · Responsive · RGS integration scaffold
+  Stake Engine-ready frontend · Svelte 5 · PixiJS · Vite · Typed RGS event playback
 </p>
 
 ---
@@ -101,6 +101,7 @@ See [`stake-engine/README.md`](stake-engine/README.md) and [`stake-engine/submis
 ## Tech stack
 
 - **Svelte 5**
+- **PixiJS 8** for reels, symbols, and feature playback
 - **Vite**
 - **TypeScript / JavaScript**
 - Static production build
@@ -158,8 +159,9 @@ BONUS-BUY.md     Buy Access / Vault feature specification
 HANDOFF.md       current continuation state and next steps
 branding/        GRIND. identity + cover previews
 demo/            reference-matched zero-build audience demo + Bonus Buy
-math/            math package notes / production math work
-src/             Svelte application source
+math/            Phase 1 Python math interfaces, tests, and output hooks
+src/game/        typed events/state, deterministic player, and Pixi renderers
+src/             Svelte application and RGS wallet lifecycle
 stake-engine/    Engine integration + submission checklist
 assets/          base game, full generated masters, reel art and bonus assets
 ```

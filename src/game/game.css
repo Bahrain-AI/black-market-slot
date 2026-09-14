@@ -1,0 +1,5 @@
+.reels-canvas{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+.reels-canvas canvas{display:block;width:100%;height:100%}
+.feature-status{position:absolute;z-index:30;top:1rem;left:50%;transform:translateX(-50%);display:flex;gap:.75rem;align-items:center;min-height:2.75rem;padding:.5rem 1rem;border:1px solid rgba(212,168,67,.65);background:rgba(18,13,9,.9);color:#f0d7aa;letter-spacing:.08em;pointer-events:none}
+.feature-status:empty{display:none}.feature-status b,.feature-status span{white-space:nowrap}.feature-status span{color:#d4a843}
+@media(max-width:768px){.feature-status{top:.5rem;max-width:90vw;font-size:.75rem}.feature-status span{white-space:normal}.reels-canvas{min-height:18rem}}
