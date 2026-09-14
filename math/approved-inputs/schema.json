@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BLACK MARKET approved production math inputs",
+  "type": "object",
+  "required": ["schemaVersion", "provisional", "approval", "sourceFiles", "modes", "maximumWin", "par"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "provisional": { "const": false },
+    "approval": {
+      "type": "object",
+      "required": ["version", "approver", "date", "signedSource"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "approver": { "type": "string", "minLength": 1 },
+        "date": { "type": "string", "format": "date" },
+        "signedSource": { "$ref": "#/$defs/sourceFile" }
+      }
+    },
+    "sourceFiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/sourceFile" }
+    },
+    "modes": {
+      "type": "object",
+      "required": ["base", "backroom", "vault", "black_card"],
+      "additionalProperties": false,
+      "properties": {
+        "base": { "$ref": "#/$defs/mode" },
+        "backroom": { "$ref": "#/$defs/mode" },
+        "vault": { "$ref": "#/$defs/mode" },
+        "black_card": { "$ref": "#/$defs/mode" }
+      }
+    },
+    "maximumWin": { "type": "number", "exclusiveMinimum": 0 },
+    "par": {
+      "type": "object",
+      "required": ["metrics"],
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "required": ["base", "backroom", "vault", "black_card"],
+          "additionalProperties": false,
+          "properties": {
+            "base": { "$ref": "#/$defs/metricBounds" },
+            "backroom": { "$ref": "#/$defs/metricBounds" },
+            "vault": { "$ref": "#/$defs/metricBounds" },
+            "black_card": { "$ref": "#/$defs/metricBounds" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sourceFile": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "mode": {
+      "type": "object",
+      "required": ["rtp", "cost"],
+      "properties": {
+        "rtp": { "type": "number", "minimum": 0.9, "maximum": 0.98 },
+        "cost": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "metricBounds": {
+      "type": "object",
+      "required": ["maxWinFrequency", "hitRate", "volatility", "featureFrequency"],
+      "properties": {
+        "maxWinFrequency": { "$ref": "#/$defs/bounds" },
+        "hitRate": { "$ref": "#/$defs/bounds" },
+        "volatility": { "$ref": "#/$defs/bounds" },
+        "featureFrequency": { "$ref": "#/$defs/bounds" }
+      }
+    },
+    "bounds": {
+      "type": "object",
+      "required": ["min", "max"],
+      "properties": {
+        "min": { "type": "number", "minimum": 0 },
+        "max": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

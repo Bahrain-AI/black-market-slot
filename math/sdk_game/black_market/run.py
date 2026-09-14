@@ -16,6 +16,8 @@ are supplied.
 """
 
 import os
+import sys
+from pathlib import Path
 
 from game_config import GameConfig
 from game_optimization import OptimizationSetup
@@ -29,6 +31,37 @@ from utils.rgs_verification import execute_all_tests
 def _env_int(name: str, default: int) -> int:
     raw = os.environ.get(name)
     return int(raw) if raw else default
+
+
+def _env_flag(name: str) -> bool:
+    return os.environ.get(name, "").strip().lower() in {"1", "true", "yes"}
+
+
+def _approved_inputs_directory() -> Path:
+    override = os.environ.get("BLM_APPROVED_INPUTS")
+    if override:
+        return Path(override).resolve()
+    for candidate in (Path.cwd(), *Path.cwd().parents, Path(__file__).resolve(), *Path(__file__).resolve().parents):
+        approved_inputs = candidate / "approved-inputs"
+        if approved_inputs.is_dir():
+            return approved_inputs
+    return Path.cwd() / "approved-inputs"
+
+
+def _require_production_approval() -> dict:
+    approved_inputs = _approved_inputs_directory()
+    tools_directory = approved_inputs.parent / "tools"
+    if str(tools_directory) not in sys.path:
+        sys.path.insert(0, str(tools_directory))
+    try:
+        from validate_approved_inputs import ApprovalValidationError, validate_input_directory
+
+        return validate_input_directory(approved_inputs)
+    except (ImportError, ApprovalValidationError) as exc:
+        raise RuntimeError(
+            "BLM_PRODUCTION=1 requires a validated non-provisional approval manifest in "
+            f"{approved_inputs}: {exc}"
+        ) from exc
 
 
 def _remove_stale_optimized_luts(config) -> None:
@@ -67,15 +100,23 @@ if __name__ == "__main__":
         "black_card": _env_int("BLM_BLACK_CARD_SIMS", 10_000),
     }
 
+    production = _env_flag("BLM_PRODUCTION")
+    if production:
+        _require_production_approval()
+
     run_conditions = {
         "run_sims": True,
-        "run_optimization": False,  # Rust optimizer binary not available in this environment.
+        "run_optimization": _env_flag("BLM_RUN_OPTIMIZATION"),
         "run_analysis": True,
         "run_format_checks": True,
     }
     target_modes = ["base", "backroom", "vault", "black_card"]
 
     config = GameConfig()
+    if production and config.provisional:
+        raise RuntimeError("BLM_PRODUCTION=1 refuses a GameConfig marked provisional")
+    if run_conditions["run_optimization"] and config.provisional:
+        raise RuntimeError("BLM_RUN_OPTIMIZATION=1 refuses provisional optimization inputs")
     gamestate = GameState(config)
     if run_conditions["run_optimization"] or run_conditions["run_analysis"]:
         OptimizationSetup(config)

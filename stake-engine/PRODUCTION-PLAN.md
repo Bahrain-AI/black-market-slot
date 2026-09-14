@@ -246,20 +246,20 @@ Order:
 ```markdown
 # BLACK MARKET production status
 
-Baseline commit: <sha>
-Release version: <version or pending>
-Date: <UTC timestamp>
+Baseline commit: c87e0bef4f449f515396cfd8b5a28711464cdd66
+Release version: pending
+Date: 2026-09-14T18:32:14Z
 
 ## G1 — Math
-Status: DONE | BLOCKED-ON-USER | READY-FOR-USER
-Inputs received:
-Changes:
-Verification:
-RTP by mode:
-RTP spread:
-Maximum-win frequency:
-Book/LUT/replay hashes:
-Blocker or next action:
+Status: BLOCKED-ON-USER
+Inputs received: None; approved production math remains unavailable.
+Changes: Added approval-manifest schema and validator, PAR validator, production/optimizer guards, and provisional-artifact release rejection.
+Verification: SDK smoke checks reported zero errors; 18 math tests passed; production runner rejected the absent approval manifest.
+RTP by mode: Not run; final approved inputs are absent.
+RTP spread: Not run; final approved inputs are absent.
+Maximum-win frequency: Not run; approved bounds are absent.
+Book/LUT/replay hashes: Not available; final books were not generated.
+Blocker or next action: Provide the signed approval/version package, values, reel strips, probabilities, optimizer fences, and PAR bounds listed above.
 
 ## G2 — Assets/provenance
 Status: DONE | BLOCKED-ON-USER | READY-FOR-USER
