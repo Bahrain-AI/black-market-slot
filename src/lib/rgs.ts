@@ -1,4 +1,5 @@
 export const API_AMOUNT_MULTIPLIER = 1_000_000;
+export const PAYOUT_HUNDREDTHS = 100;
 
 export type EngineConfig = {
   minBet: number;
@@ -93,4 +94,8 @@ export function formatEngineAmount(amount: number, currency = 'USD', forcePrecis
   } catch {
     return `${currency} ${value.toFixed(max)}`;
   }
+}
+
+export function payoutFromHundredths(bet: number, payoutHundredths: number) {
+  return Math.round((bet * payoutHundredths) / PAYOUT_HUNDREDTHS);
 }

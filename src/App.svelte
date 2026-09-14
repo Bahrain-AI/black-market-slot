@@ -7,7 +7,7 @@
   import { parseRoundBook } from './game/engine/roundBook';
   import { initialGameState, type GameState } from './game/state/gameState';
   import type { GameEvent, RoundBook } from './game/events/types';
-  import { authenticate, play, endRound, getReplay, readEngineParams, formatEngineAmount } from './lib/rgs';
+  import { authenticate, play, endRound, getReplay, readEngineParams, formatEngineAmount, payoutFromHundredths } from './lib/rgs';
   import { GAME_RULES } from './game/config/rules';
 
   const params = readEngineParams();
@@ -41,7 +41,7 @@
     spinning = true;
     try {
       const state = await player.play(book.events);
-      win = Math.round(bet * state.totalWin);
+      win = payoutFromHundredths(bet, state.totalWin);
     } finally { spinning = false; }
   }
 
@@ -53,7 +53,7 @@
 
   function onGameState(state: GameState, _event: GameEvent) {
     gameState = state;
-    win = Math.round(bet * state.totalWin);
+    win = payoutFromHundredths(bet, state.totalWin);
   }
 
   async function initialise() {
@@ -95,7 +95,7 @@
         balance -= bet;
         const book = DEMO_ROUNDS[0];
         await playBook(book);
-        balance += Math.round(bet * book.payoutMultiplier);
+        balance += payoutFromHundredths(bet, book.payoutMultiplier);
       } else {
         spinning = true;
         const result = await play(params.rgsUrl, params.sessionID, bet, 'base');

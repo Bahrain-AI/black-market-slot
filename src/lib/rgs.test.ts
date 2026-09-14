@@ -1,9 +1,14 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getReplay, play } from './rgs';
+import { getReplay, payoutFromHundredths, play } from './rgs';
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe('Stake RGS transport', () => {
+  it('converts 610 and 6400 SDK payout hundredths at the wallet boundary', () => {
+    expect(payoutFromHundredths(1_000_000, 610)).toBe(6_100_000);
+    expect(payoutFromHundredths(1_000_000, 6400)).toBe(64_000_000);
+  });
+
   it('preserves integer amount precision in wallet play', async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ balance: { amount: 42_000_001, currency: 'USD' }, round: { id: 1, events: [], payoutMultiplier: 0 } }), { status: 200 }));
     vi.stubGlobal('fetch', fetchMock);
