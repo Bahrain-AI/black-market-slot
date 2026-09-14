@@ -14,3 +14,14 @@ These are production asset requirements, not final artwork. Author at 2× displa
 | Multiplier increase effect | `fx-multiplier-increase.webp` plus JSON | 2048×1024 sheet; 256×256 frames | WebP RGBA, transparent additive-safe | charge, burst, tier-change, settle | Full-board Container overlay during `multiplierIncrease`; update badge only at the tier-change frame. |
 
 JSON sprite data should use TexturePacker-compatible frame rectangles, anchors, durations in milliseconds, and named animation arrays. Provide a static first-frame PNG fallback for review tooling. Do not bake win values, multiplier numbers, or localized text into effects; PixiJS renders those from event data.
+
+## Placeholder pipeline
+
+The repository ships a working generator for placeholder frames in this exact
+layout: `tools/animation/generate_atlas.mjs` authors SVG keyframes into
+`assets/anim-frames/<name>/`, rasterizes them (sharp, no browser), and packs
+each animation into `<name>.webp` + `<name>.json` under `assets/animations/`.
+Run `corepack pnpm gen:animations`, validate with `corepack pnpm test`
+(see `tools/animation/atlasSchema.test.ts`). Placeholder sheets are marked as
+such in `assets/PROVENANCE.md`; replace the keyframes with hand-authored art
+before the approval round.

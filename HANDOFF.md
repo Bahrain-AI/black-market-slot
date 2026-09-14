@@ -45,6 +45,15 @@ This includes:
 
 Current runtime symbols/assets also exist under `assets/` and `demo/assets/` as appropriate.
 
+## Latest addition — Animation engine, atlas pipeline & symbol swap
+
+- **Runtime symbols** now use the ChatGPT-generated tile art: `assets/symbols/*.webp` (copied from the complete asset pack) are loaded by `GameRenderer` and rendered as full-bleed tiles with tint-based win/remove/lock feedback; the `assets/symbols/*.svg` icons remain as fallbacks.
+- **GSAP 3** (free, bundled, no CDN) drives a full animation engine (`src/game/pixi/AnimationController.ts` + `Effects.ts`) wired to every SDK event type: staggered board reveals/refills, win pulses with gold rings, fracture-and-fade cascade removal, wild-expand sunburst rays + ring, scatter glow pulse, multiplier badge pop + board flash, hold-lock elastic pops, confetti on Hold & Spin / payout wins, and animated banners.
+- **Sprite-sheet pipeline** (`tools/animation/generate_atlas.mjs`, `pnpm gen:animations`): authors placeholder SVG keyframes into `assets/anim-frames/<name>/`, rasterizes with sharp, packs WebP strips + TexturePacker JSON into `assets/animations/<name>`. Overlays play through `src/game/pixi/animationSheets.ts` (AnimatedSprite). Schema acceptance tests: `tools/animation/atlasSchema.test.ts`.
+- **Provenance**: `assets/PROVENANCE.md` documents that the pack is ChatGPT-generated on behalf of the owner (owner holds rights, prototype quality, excluded from PAR claims) and flags the user-supplied reference image / its crops as the one ownership item to confirm before production.
+
+See `stake-engine/submission-checklist.md` for the updated frontend items.
+
 ## Latest addition — Bonus Buy / The Vault
 
 Read [`BONUS-BUY.md`](BONUS-BUY.md) before implementing the next feature phase.

@@ -19,6 +19,9 @@
 - [x] Ordered event indices are validated before playback and state reducers reject non-monotonic events.
 - [x] Frontend round-book parser acceptance tests (`src/game/engine/roundBook.test.ts`) consume verbatim SDK book payloads covering all 16 event types (base cascade, Free Spins multiplier advance, Hold & Spin incl. a new lock landing during respins); 15 frontend tests pass, `svelte-check` clean, production build green.
 - [x] Rules / game-information modal is config-driven (`src/game/config/rules.ts`), rendering features, bet modes, provisional RTP and max win from a single source of truth.
+- [x] GSAP 3 animation engine (`src/game/pixi/AnimationController.ts` + `Effects.ts`) drives every event type: staggered board reveal/refill, win pulse with gold rings, fracture+fade symbol removal, wild-expand ray burst + AnimatedSprite overlay, scatter glow pulse, multiplier badge pop + board flash, hold-lock elastic pop-ins, falling-confetti celebrations, animated banners.
+- [x] Sprite-sheet atlas pipeline (`tools/animation/generate_atlas.mjs`, `pnpm gen:animations`) produces the production-spec WebP strips + TexturePacker JSON; placeholder sheets are validated by `tools/animation/atlasSchema.test.ts` and played as AnimatedSprite overlays (`src/game/pixi/animationSheets.ts`).
+- [x] Runtime symbols use the ChatGPT-generated tile art (`assets/symbols/*.webp`); SVG icons remain as fallbacks.
 - [ ] Final rules/paytable populated from approved math values.
 - [ ] Verify exact win increment animation against every multi-event result.
 - [ ] Validate all currencies/languages in Engine staging.
@@ -54,7 +57,7 @@
 - [x] No Stake branding in game artwork.
 - [x] No child-like characters or youth-targeted content.
 - [x] Original visual direction.
-- [ ] Confirm ownership/licensing of every final visual/audio asset.
+- [ ] Confirm ownership/licensing of every final visual/audio asset — provenance documented in `assets/PROVENANCE.md`; AI-generated pack is owner-created placeholder material, and ownership of the user-supplied reference image must be confirmed before production.
 - [x] Game description / promotional blurb exists (`stake-engine/game-description.md`).
 - [ ] Add final RTP and max win to in-game rules (requires approved math values).
 
@@ -63,7 +66,7 @@
 - [x] `BlackMarket-FG.png` generated (transparent foreground, 1280×720).
 - [x] `GrindStudios-Logo.png` generated (512×384).
 - [x] Combined size verified ≤ 3 MB (actual: ~1.5 MB).
-- [ ] Replace placeholder art with final approved artwork/asset licensing.
+- [ ] Replace placeholder art with final approved artwork/asset licensing (see `assets/PROVENANCE.md`; animation placeholders regenerate via `pnpm gen:animations`).
 
 ## Submission infrastructure
 - [x] Submission metadata (`stake-engine/submission-metadata.json`) capturing game info, bet modes, provisional math, required inputs.

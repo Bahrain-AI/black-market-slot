@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import type { GameEvent } from '../events/types';
 import type { GameState } from '../state/gameState';
 import { AnimationController } from './AnimationController';
+import { OverlayAtlas } from './animationSheets';
 import { ReelRenderer, REEL_HEIGHT, REEL_WIDTH } from './ReelRenderer';
 
 const SYMBOLS = ['watch', 'diamond', 'ace', 'gold', 'cash', 'passport', 'bag', 'bust', 'wild', 'vip'];
@@ -13,18 +14,31 @@ export class GameRenderer {
   private reels!: ReelRenderer;
   private anim!: AnimationController;
   private readonly root = new Container();
-  private readonly banner = new Text({ text: '', style: { fill: 0xffdf93, fontSize: 30, fontWeight: '700', align: 'center', stroke: { color: 0x120c06, width: 6 } } });
+  private readonly banner = new Text({
+    text: '',
+    style: { fill: 0xffdf93, fontSize: 30, fontWeight: '700', align: 'center', stroke: { color: 0x120c06, width: 6 } },
+  });
 
   async mount(host: HTMLElement) {
-    await this.app.init({ resizeTo: host, backgroundAlpha: 0, antialias: true, autoDensity: true, resolution: Math.min(devicePixelRatio, 2) });
+    await this.app.init({
+      resizeTo: host,
+      backgroundAlpha: 0,
+      antialias: true,
+      autoDensity: true,
+      resolution: Math.min(devicePixelRatio, 2),
+    });
     host.appendChild(this.app.canvas);
     const textures: Record<string, Texture> = {};
-    await Promise.all(SYMBOLS.map(async (name) => {
-      const url = new URL(`./symbols/${name}.svg`, document.baseURI).href;
-      textures[name] = await Assets.load<Texture>(url);
-    }));
+    await Promise.all(
+      SYMBOLS.map(async (name) => {
+        const url = new URL(`./symbols/${name}.webp`, document.baseURI).href;
+        textures[name] = await Assets.load<Texture>(url);
+      }),
+    );
     this.reels = new ReelRenderer(textures);
-    this.anim = new AnimationController(this.reels);
+    const overlays = new OverlayAtlas();
+    await overlays.load('symbol-wild-expand', 'symbol-scatter-freespins');
+    this.anim = new AnimationController(this.reels, overlays);
     this.banner.anchor.set(0.5);
     this.banner.position.set(REEL_WIDTH / 2, REEL_HEIGHT / 2);
     this.banner.visible = false;
@@ -64,12 +78,15 @@ export class GameRenderer {
         await anim.showBanner(this.banner, `WILD EXPANDS · REEL ${event.reel + 1}`, duration);
         break;
       case 'multiplierIncrease':
-        await anim.multiplierIncrease(duration);
+        await anim.multiplierIncrease(event.to, duration);
         await anim.showBanner(this.banner, `MULTIPLIER ${event.to}×`, duration);
         break;
       case 'freeSpinsStart':
         await anim.freeSpinsStart(duration);
         await anim.showBanner(this.banner, `${event.total} FREE SPINS`, duration);
+        break;
+      case 'freeSpin':
+        await wait(duration);
         break;
       case 'holdSpinStart':
         this.reels.showLocks(state.holdSpin.locked);
@@ -84,6 +101,7 @@ export class GameRenderer {
         this.reels.showLocks(state.holdSpin.locked);
         break;
       case 'holdSpinEnd':
+        anim.confetti(duration);
         await anim.showBanner(this.banner, `HOLD WIN ${event.total}×`, duration);
         break;
       case 'payout':

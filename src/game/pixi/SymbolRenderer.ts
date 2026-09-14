@@ -38,6 +38,9 @@ export class SymbolRenderer extends Container {
   }
 
   highlight(active: boolean, color = 0xffd36a) {
+    // Tint both the frame and the (opaque) symbol tile so win/remove/lock
+    // feedback stays visible on full-bleed art.
     this.frame.tint = active ? color : 0xffffff;
+    this.sprite.tint = active ? color : 0xffffff;
   }
 }
