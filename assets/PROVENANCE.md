@@ -40,6 +40,12 @@ of the project owner, then organized into the folders under `assets/`:
   confirm the reference image is the owner's own original (or licensed)
   work. If it cannot be confirmed, source production symbols from scratch.
 
+- The user confirmed on 2026-09-14 UTC that the supplied reference image is
+  owned or licensed for this project. Confirmed-by: user.
+- This confirmation records rights to the supplied reference only. The selected
+  submission policy still requires all reference-derived and placeholder assets
+  to be replaced before production submission.
+
 ## 4. Production animation assets (not yet in this pack)
 
 Per `assets/specs/mechanics-assets.md`, the following production sheets are

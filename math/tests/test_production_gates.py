@@ -7,10 +7,13 @@ from pathlib import Path
 
 MATH_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(MATH_ROOT / "tools"))
+sys.path.insert(0, str(MATH_ROOT.parent / "tools" / "submission"))
 
 from validate_approved_inputs import ApprovalValidationError, validate_input_directory
 from validate_par import ParValidationError, validate_par_metrics
 from validate_delivery import ReleaseEligibilityError, assert_release_eligible
+from validate_assets import AssetValidationError, validate_manifest
+from build_tile_package import TileSourceError, validate_release_sources
 
 
 MODES = ("base", "backroom", "vault", "black_card")
@@ -111,6 +114,56 @@ class ProductionGateTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ReleaseEligibilityError, "provisional"):
                 assert_release_eligible(package)
+
+    def test_empty_non_release_asset_manifest_is_valid_for_current_state(self):
+        with tempfile.TemporaryDirectory() as folder:
+            manifest = Path(folder) / "licenses.json"
+            manifest.write_text(
+                json.dumps({"schemaVersion": 1, "release": False, "assets": [], "audio": "none"}),
+                encoding="utf-8",
+            )
+            report = validate_manifest(manifest)
+            self.assertEqual(report["assetCount"], 0)
+
+    def test_asset_manifest_rejects_hash_mismatches(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            image = root / "symbol.webp"
+            image.write_bytes(b"production-art")
+            manifest = root / "licenses.json"
+            manifest.write_text(
+                json.dumps(
+                    {
+                        "schemaVersion": 1,
+                        "release": False,
+                        "audio": "none",
+                        "assets": [
+                            {
+                                "path": "symbol.webp",
+                                "sha256": "0" * 64,
+                                "creatorLicensor": "Artist",
+                                "licenceGrant": "Project licence",
+                                "approvalDate": "2026-09-14",
+                                "sourceFile": "source.psd",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(AssetValidationError, "sha256"):
+                validate_manifest(manifest)
+
+    def test_release_tile_builder_refuses_reference_sources(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            background = root / "reference-background.png"
+            foreground = root / "foreground.png"
+            logo = root / "logo.png"
+            for path in (background, foreground, logo):
+                path.write_bytes(b"image")
+            with self.assertRaisesRegex(TileSourceError, "reference"):
+                validate_release_sources(background, foreground, logo)
 
 
 if __name__ == "__main__":

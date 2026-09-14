@@ -248,7 +248,7 @@ Order:
 
 Baseline commit: c87e0bef4f449f515396cfd8b5a28711464cdd66
 Release version: pending
-Date: 2026-09-14T18:32:14Z
+Date: 2026-09-14T18:36:48Z
 
 ## G1 — Math
 Status: BLOCKED-ON-USER
@@ -262,13 +262,13 @@ Book/LUT/replay hashes: Not available; final books were not generated.
 Blocker or next action: Provide the signed approval/version package, values, reel strips, probabilities, optimizer fences, and PAR bounds listed above.
 
 ## G2 — Assets/provenance
-Status: DONE | BLOCKED-ON-USER | READY-FOR-USER
-Inputs received:
-Rights/provenance result:
-Atlas validation:
-Tile dimensions and combined size:
-Visual QA:
-Blocker or next action:
+Status: BLOCKED-ON-USER
+Inputs received: Reference-image rights confirmation only; final artwork and production provenance records are absent.
+Rights/provenance result: User confirmed the supplied reference image is owned or licensed on 2026-09-14 UTC; reference-derived placeholders remain prohibited for release.
+Atlas validation: Not run for release; current animation frames and atlases are placeholders.
+Tile dimensions and combined size: Not re-built for release; release mode refused the absent final sources before writing a tile package.
+Visual QA: Not run; final art is absent.
+Blocker or next action: Provide the ten symbols, all mechanics-spec animation sources, final tile art, provider logo, any audio or a no-audio declaration, and one complete provenance/hash record per shipped file.
 
 ## G3 — ACP/staging
 Status: DONE | BLOCKED-ON-USER | READY-FOR-USER
