@@ -30,6 +30,8 @@
   let turbo = $state(false);
   let replayReady = $state(false);
   let jurisdiction = $state<Record<string, unknown>>({});
+  let selectedMode = $state('base');
+  let pendingBuyMode = $state<string | null>(null);
 
   function roundFrom(value: unknown) {
     const record = value as Record<string, unknown>;
@@ -98,7 +100,7 @@
         balance += payoutFromHundredths(bet, book.payoutMultiplier);
       } else {
         spinning = true;
-        const result = await play(params.rgsUrl, params.sessionID, bet, 'base');
+        const result = await play(params.rgsUrl, params.sessionID, bet, selectedMode);
         if (result.balance) balance = result.balance.amount;
         if (!result.round) throw new Error('RGS response is missing round data');
         await playBook(roundFrom(result.round));
@@ -119,6 +121,12 @@
     if (spinning) return;
     const index = Math.max(0, betLevels.findIndex((value) => value === bet));
     bet = betLevels[Math.max(0, Math.min(betLevels.length - 1, index + delta))] ?? bet;
+  }
+
+  function requestBuyMode(mode: string) { pendingBuyMode = mode; }
+  function confirmBuyMode() {
+    if (pendingBuyMode) selectedMode = pendingBuyMode;
+    pendingBuyMode = null;
   }
 
   onMount(initialise);
@@ -155,6 +163,16 @@
     {#if params.replay}
       <button class="replay-btn" onclick={playReplay} disabled={!replayReady || spinning}>{spinning ? 'PLAYING' : 'PLAY REPLAY'}</button>
     {:else}
+      {#if !demoMode}
+        <div class="buy-controls" aria-label="Bonus Buy modes">
+          <button class:active={selectedMode === 'base'} onclick={() => selectedMode = 'base'} disabled={spinning}>BASE</button>
+          {#each GAME_RULES.betModes.filter((mode) => mode.buyBonus) as mode}
+            <button class:active={selectedMode === mode.name} onclick={() => requestBuyMode(mode.name)} disabled={spinning}>
+              {mode.label} {mode.cost}×
+            </button>
+          {/each}
+        </div>
+      {/if}
       <button class="spin" onclick={spin} disabled={spinning || !player} aria-label="Spin">↻</button>
       <button onclick={() => muted = !muted}>{muted ? 'SOUND OFF' : 'SOUND ON'}</button>
       {#if !jurisdiction.disabledTurbo}<button class:active={turbo} onclick={() => turbo = !turbo}>TURBO</button>{/if}
@@ -178,5 +196,21 @@
     </div>
   {/if}
 </div>
+
+{#if pendingBuyMode}
+  {@const mode = GAME_RULES.betModes.find((item) => item.name === pendingBuyMode)}
+  {#if mode}
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="buy-title">
+      <div>
+        <button class="close" onclick={() => pendingBuyMode = null} aria-label="Cancel Bonus Buy">×</button>
+        <h2 id="buy-title">CONFIRM {mode.label.toUpperCase()}</h2>
+        <p>{mode.description}</p>
+        <p><b>COST: {mode.cost}× BET</b></p>
+        <button onclick={confirmBuyMode}>CONFIRM {mode.label.toUpperCase()}</button>
+        <button onclick={() => pendingBuyMode = null}>CANCEL</button>
+      </div>
+    </div>
+  {/if}
+{/if}
 
 <svelte:window onkeydown={(event) => { if (event.code === 'Space' && !params.replay && !rulesOpen && event.target === document.body) { event.preventDefault(); spin(); } }} />
