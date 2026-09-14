@@ -17,6 +17,7 @@
 - [x] Typed, deterministic playback covers reveal, cascades, expanding Wilds, Free Spins multiplier state, Hold & Spin locks, payout, and round end.
 - [x] Production frontend contains no outcome RNG; local demo events are isolated fixtures.
 - [x] Ordered event indices are validated before playback and state reducers reject non-monotonic events.
+- [x] Rules / game-information modal is config-driven (`src/game/config/rules.ts`), rendering features, bet modes, provisional RTP and max win from a single source of truth.
 - [ ] Final rules/paytable populated from approved math values.
 - [ ] Verify exact win increment animation against every multi-event result.
 - [ ] Validate all currencies/languages in Engine staging.
@@ -29,6 +30,9 @@
 - [x] Official Stake Engine Math SDK checkout is pinned to commit `307e6812b38489e212f835001f21e9f7d4c18a4d`; bootstrap validates the revision and required SDK interfaces.
 - [x] Provisional BLACK MARKET SDK game overlay (`math/sdk_game/black_market/`) stages into the pinned checkout as `games/black_market/`; configures 5×4 board, symbols, provisional reels, base/Free Spins/Hold & Spin mechanics, Bonus Buy modes, and max-win/RTP hooks.
 - [x] SDK smoke test (`math/tools/smoke_sdk_game.py`) instantiates `GameConfig` against the pinned checkout and proves all 16 frontend event types map through an SDK-shaped book with valid indices and payloads.
+- [x] Seeded provisional round simulator (`math/black_market/simulator.py`) implements pay-anywhere cluster detection, cascades, expanding Wilds, Free Spins with multiplier progression, Hold & Spin with locked prizes, and buy-mode features; exercised across 4 bet modes.
+- [x] Provisional package builder (`math/tools/build_provisional_package.py`) produces books, LUTs, `index.json`, `.jsonl.zst`, PAR-style statistics and replay records per mode; validated end-to-end at 100k rounds.
+- [x] Delivery validator (`math/tools/validate_delivery.py`) cross-checks a generated package against the Engine contract and reports validity.
 - [ ] Final game logic implemented with approved production inputs in the SDK overlay (current overlay inputs remain explicitly provisional).
 - [ ] 100k+ diverse simulations generated for each production mode (recommended by Engine docs).
 - [ ] Weighted lookup tables optimized to final RTP.
@@ -45,14 +49,19 @@
 - [x] No child-like characters or youth-targeted content.
 - [x] Original visual direction.
 - [ ] Confirm ownership/licensing of every final visual/audio asset.
-- [ ] Add final game description / promotional blurb.
-- [ ] Add final RTP and max win to in-game rules.
+- [x] Game description / promotional blurb exists (`stake-engine/game-description.md`).
+- [ ] Add final RTP and max win to in-game rules (requires approved math values).
 
 ## Tile package
-Stake Engine requires:
-- [ ] `BlackMarket-BG.png` or `.jpg` — high-resolution environmental background.
-- [ ] `BlackMarket-FG.png` — transparent foreground character/key item.
-- [ ] `<ProviderName>-Logo.png` — transparent provider/studio logo.
-- [ ] Background + foreground combined size <= 3 MB.
+- [x] `BlackMarket-BG.png` generated (`stake-engine/tile-package/`), 1280×720.
+- [x] `BlackMarket-FG.png` generated (transparent foreground, 1280×720).
+- [x] `GrindStudios-Logo.png` generated (512×384).
+- [x] Combined size verified ≤ 3 MB (actual: ~1.5 MB).
+- [ ] Replace placeholder art with final approved artwork/asset licensing.
+
+## Submission infrastructure
+- [x] Submission metadata (`stake-engine/submission-metadata.json`) capturing game info, bet modes, provisional math, required inputs.
+- [x] Submission runbook (`stake-engine/submission-runbook.md`) documenting the full ACP portal upload process, staging validation checklist, and PAR acceptance criteria.
+- [x] README (`stake-engine/README.md`) documents the Engine runtime flow and build instructions.
 
 Do not submit until every unchecked approval-critical item above is complete.

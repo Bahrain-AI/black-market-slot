@@ -8,6 +8,7 @@
   import { initialGameState, type GameState } from './game/state/gameState';
   import type { GameEvent, RoundBook } from './game/events/types';
   import { authenticate, play, endRound, getReplay, readEngineParams, formatEngineAmount } from './lib/rgs';
+  import { GAME_RULES } from './game/config/rules';
 
   const params = readEngineParams();
   const demoMode = !params.rgsUrl || (!params.sessionID && !params.replay);
@@ -166,9 +167,13 @@
         <button class="close" onclick={() => rulesOpen = false} aria-label="Close game information">×</button>
         <h2 id="rules-title">BLACK MARKET</h2>
         <p>5×4 cascading reels with expanding Wilds, Free Spins, a progressive Free Spins multiplier, and Hold & Spin. Production results are played exclusively from ordered Stake Engine events.</p>
+        <h3>FEATURES</h3>
+        <ul>{#each GAME_RULES.features as feature}<li>{feature}</li>{/each}</ul>
+        <h3>BET MODES</h3>
+        <ul>{#each GAME_RULES.betModes as mode}<li><b>{mode.label}</b> — {mode.cost}× bet{mode.buyBonus ? ' · Buy Bonus' : ''}. {mode.description}</li>{/each}</ul>
         <h3>GAME INFORMATION</h3>
-        <p>Target RTP is provisionally configured at 96.00%. It is not certified. Final RTP, maximum win, volatility, paytable, and feature frequencies require simulation and approval.</p>
-        <h3>CONTROLS</h3><p>Spin places a bet. Bet controls use only levels supplied by the RGS. Turbo changes presentation speed when the jurisdiction permits it. Spacebar activates Spin.</p>
+        <p>RTP is provisionally configured at {(GAME_RULES.targetRtp * 100).toFixed(2)}% and maximum win at {GAME_RULES.maxWin}×. These values are <b>not certified</b>. Final RTP, maximum win, volatility, paytable, and feature frequencies require simulation and approval.</p>
+        <h3>CONTROLS</h3><p>{GAME_RULES.controls}</p>
       </div>
     </div>
   {/if}

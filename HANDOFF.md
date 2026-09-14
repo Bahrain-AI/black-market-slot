@@ -110,6 +110,20 @@ The provisional BLACK MARKET overlay for the pinned official Stake Engine Math S
 
 `python math/tools/bootstrap_sdk.py` now stages the overlay into the pinned checkout (`games/black_market/`) after revision validation, and `python math/tools/smoke_sdk_game.py` proves the staged `GameConfig` instantiates against the pinned SDK and that every frontend event maps correctly. All overlay values remain configuration-driven and explicitly provisional; nothing here is certified production math.
 
+## Submission package and provisional pipeline
+
+The full Stake Engine publication pipeline is now exercised end-to-end at development scale:
+
+- **Simulator** (`math/black_market/simulator.py`): seeded provisional round generator driving `GameExecutables` / `GameState` for all four bet modes (base / backroom / vault / black_card); implements pay-anywhere cluster detection, cascades, expanding Wilds, Free Spins with multiplier progression, Hold & Spin, forced wincap, and buy-mode features.
+- **Package builder** (`math/tools/build_provisional_package.py`): runs 100k+ rounds per mode, writes books (`.jsonl.zst`), lookup CSVs, `index.json`, cross-validates the package, computes PAR-style statistics, and records replay IDs per mode into `provisional-summary.json`. Output lives in `math/.artifacts/provisional-package/` (Git-ignored).
+- **Delivery validator** (`math/tools/validate_delivery.py`): cross-checks an existing package directory against the Engine contract.
+- **Tile package** (`stake-engine/tile-package/`): `BlackMarket-BG.png` (1280×720), `BlackMarket-FG.png` (transparent foreground), `GrindStudios-Logo.png` (512×384); combined ~1.5 MB, verified ≤ 3 MB Engine limit.
+- **Rules UI** (`src/game/config/rules.ts`): single source of truth for the in-game Rules modal — features, bet modes, provisional RTP and max win, rendered via `App.svelte`.
+- **Submission metadata** (`stake-engine/submission-metadata.json`): game info, provider (Grind Studios / GRIND.), bet modes, provisional math fields, required external inputs.
+- **Submission runbook** (`stake-engine/submission-runbook.md`): complete ACP portal submission process, staging validation checklist, and PAR acceptance criteria.
+
+Provisional RTP values in the package are deliberately unoptimized and off-target; they prove the pipeline is wired end-to-end and flag the need for the certified simulation set.
+
 ## Recommended next implementation phase
 
 1. Add a **BUY ACCESS** button/panel to the audience demo without disturbing the reference-matched idle composition.

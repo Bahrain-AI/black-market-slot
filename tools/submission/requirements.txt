@@ -1,0 +1,3 @@
+# Build-tool dependencies for Stake Engine submission tooling
+# (tile package generation under tools/submission/).
+pillow>=10.0

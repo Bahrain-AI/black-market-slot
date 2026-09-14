@@ -1,0 +1,61 @@
+{
+  "status": "PROVISIONAL",
+  "note": "Development metadata for the Stake Engine submission package. RTP, maximum win, paytable and feature frequencies are provisional and NOT certified. Replace every marked-provisional value from the approved math package before any official submission.",
+  "game": {
+    "id": "black-market",
+    "workingTitle": "BLACK MARKET",
+    "providerName": "Grind Studios",
+    "providerBrand": "GRIND.",
+    "category": "Slots",
+    "gameType": "Video Slot",
+    "theme": ["underground auction house", "luxury", "clandestine", "mature"],
+    "format": "5x4 cascading reels",
+    "features": [
+      "Cascading wins",
+      "Expanding Wilds",
+      "Free Spins with progressive multiplier",
+      "Hold & Spin with locked prizes",
+      "Buy Bonus modes"
+    ],
+    "technologies": ["Svelte 5", "PixiJS 8", "Stake Engine RGS"],
+    "stateless": true,
+    "jackpot": false,
+    "gamble": false,
+    "description": "A premium underground-auction slot where rare watches, diamonds, gold and classified collectibles trade hands beneath warm marble, smoked glass and discreet luxury. BLACK MARKET keeps the interface deliberately minimal and lets every spin feel like another private lot crossing the block."
+  },
+  "math": {
+    "status": "PROVISIONAL — not approved production math",
+    "targetRtp": 0.96,
+    "maxWin": 5000,
+    "multiplierProgression": [1, 2, 3, 5, 10],
+    "board": { "reels": 5, "rows": 4 },
+    "betModes": [
+      { "id": "base", "cost": 1, "buyBonus": false },
+      { "id": "backroom", "cost": 60, "buyBonus": true },
+      { "id": "vault", "cost": 100, "buyBonus": true },
+      { "id": "black_card", "cost": 200, "buyBonus": true }
+    ]
+  },
+  "distribution": {
+    "languages": "All Engine-supported languages are declared; each must be validated in Engine staging.",
+    "currencies": "All Engine-supported currencies are declared; each must be validated in Engine staging.",
+    "devices": ["desktop", "mobile", "small popout"]
+  },
+  "tilePackage": {
+    "files": [
+      "stake-engine/tile-package/BlackMarket-BG.png",
+      "stake-engine/tile-package/BlackMarket-FG.png",
+      "stake-engine/tile-package/GrindStudios-Logo.png"
+    ],
+    "sizeLimitMb": 3,
+    "verifiedWithinLimit": true
+  },
+  "requiredExternalInputs": [
+    "Approved production paytable, reel strips and probability distributions (math approval / PAR review)",
+    "Final RTP and maximum win certified from the approved simulation set",
+    "100k+ diverse simulations per mode on approved inputs",
+    "Optimized weighted lookup tables to the final RTP",
+    "Stake Engine ACP / staging credentials for portal upload",
+    "Final artwork ownership/licensing confirmation"
+  ]
+}

@@ -41,6 +41,36 @@ python math/tools/smoke_sdk_game.py
 
 The repository does **not** contain fabricated production math. Final RTP, hit rate, volatility, payout table, and max-win frequency must be produced and verified from the approved simulation set before submission.
 
+## Provisional round simulator and publication pipeline
+
+`math/black_market/simulator.py` implements a seeded provisional round generator that drives the phase-1 event contract (`GameExecutables` / `GameState`) to produce development-scale result books. Rules are documented as provisional and mirror the overlay values in `math/sdk_game/black_market/game_config.py` (must be kept in sync).
+
+Mechanics implemented:
+- Uniform random 5×4 board draw from the overlay reel CSV strips (base / free-spin / hold-and-spin decks)
+- Pay-anywhere cluster detection: orthogonally connected groups ≥ 8 matching symbols with wild substitution, paid from the provisional paytable (bands: 8–9 / 10–11 / 12–14 / 15–20)
+- Cascade loop with multiplier progression in free spins (1× → 2× → 3× → 5× → 10×, advancing per cascade)
+- Free Spins: 3/4/5 scatters → 8/10/12 spins; retriggers during feature
+- Expanding Wilds: full-reel expansion when a wild is part of a winning cluster
+- Hold & Spin: ≥ 6 prize symbols trigger; respins reset on new lock; ends on 0 respins or full board
+- Forced max-win book at the overlay `wincap` frequency (0.1% of base rounds)
+- Buy modes: Back Room = forced Free Spins; Vault = forced Hold & Spin; Black Card = Free Spins + Hold & Spin with a boosted starting multiplier
+
+Run the provisioner at development scale (100k rounds per mode):
+
+```text
+python math/tools/build_provisional_package.py --rounds 100000
+```
+
+Output is written to `math/.artifacts/provisional-package/` (Git-ignored) and includes per-mode compressed books (`.jsonl.zst`), lookup CSVs, `index.json`, `provisional-summary.json` with PAR-style statistics, and a replay manifest with IDs for loss / low / mid / high / max wins per mode. Every artifact is explicitly labeled PROVISIONAL.
+
+Validate a generated package:
+
+```text
+python math/tools/validate_delivery.py --package math/.artifacts/provisional-package
+```
+
+All provisional RTP values in the package are **unoptimized and off-target**; they are pipeline proofs, not approved math. Replace with the certified simulation set before submission.
+
 ## Required publication output
 
 Place final Engine-uploadable files under `math/publish_files/`:
@@ -76,7 +106,8 @@ Engine recommends 100k+ production simulations per mode to create sufficient out
 ```text
 python -m unittest discover -s math/tests -v
 cd math && python -m black_market.run
-python math/tools/validate_artifacts.py <artifact-directory>
+python math/tools/smoke_sdk_game.py
+python math/tools/validate_delivery.py --package <artifact-directory>
 ```
 
-The validator reads uncompressed or `.jsonl.zst` books, validates every event sequence, checks unique IDs and unsigned lookup fields, proves payout equality between each book and lookup row, and reports weighted RTP as a provisional audit value. Production `index.json` entries must reference compressed books. Generated SDK checkouts and math artifacts are ignored by Git.
+The simulator tests exercise seeded determinism, contract compliance, forced-feature mode event coverage, and paytable band accuracy across all four bet modes. The delivery validator cross-checks every book/LUT pay offset and every `index.json` entry against its compressed result. The SDK smoke test validates the staged overlay configuration and all 16 frontend event mappings. Generated SDK checkouts and math artifacts are ignored by Git.
